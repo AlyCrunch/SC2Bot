@@ -8,6 +8,7 @@ namespace SC2Bot
     class Program
     {
         private static string _tokenBot;
+        private static ulong _SuperUserId = 0;
         private static DiscordClient _client;
         private static Aligulac _aligu;
 
@@ -29,7 +30,6 @@ namespace SC2Bot
                     var server = e.Server;
                     var msg = e.Message;
                     var usr = msg.User;
-
                     if (msg.Text == "" || msg.IsAuthor) return;
 
                     if (e.Channel.IsPrivate)
@@ -57,8 +57,15 @@ namespace SC2Bot
                                 await Helpers.Discord.ClearAndAddRole(server, usr, rRole);
                                 await e.Channel.SendMessage("Pour les hommes !");
                                 break;
+                            case "stop":
+                                if (Helpers.Discord.IsAdmin(usr, true, _SuperUserId))
+                                {
+                                    _client.Log.Info("MANUALLY DISCONNECTED", $"Authorized by : {usr.Name}");
+                                    await _client.Disconnect();
+                                }
+                                break;
                             default:
-                                var message = await Commands.SelectCommands(msg.Text, usr);
+                                var message = await Commands.SelectCommands(msg.Text, server, usr);
                                 if (message == null) break;
                                 await e.Channel.SendMessage(message);
                                 break;
@@ -66,7 +73,7 @@ namespace SC2Bot
                     }
                     else
                     {
-                        var message = await Commands.SelectCommands(msg.Text, usr);
+                        var message = await Commands.SelectCommands(msg.Text, server, usr);
                         if (message == null) return;
                         await e.Channel.SendMessage(message);
                     }
@@ -92,6 +99,7 @@ namespace SC2Bot
         {
             _tokenBot = Environment.GetEnvironmentVariable("APIBotSC2");
             _aligu = new Aligulac(Environment.GetEnvironmentVariable("APIBotAligulacSC2"));
+            ulong.TryParse(Environment.GetEnvironmentVariable("SuperUserIdDiscord"), out _SuperUserId);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace SC2Bot
 {
     public static class Commands
     {
-        public static async Task<string> SelectCommands(string query, Discord.User u = null)
+        public static async Task<string> SelectCommands(string query, Discord.Server s = null, Discord.User u = null)
         {
             if (query[0] != '!') return null;
 
@@ -18,11 +18,12 @@ namespace SC2Bot
 
             switch (parser.Method.ToLower())
             {
-                case "quote": return await Quote(parser, u);
-                case "top": return await Top(parser);
+                case "quote": return await Quote(parser, s, u);
+                case "top": return await Top(parser, s, u);
                 case "player": return await Player(parser);
                 case "predict": return await Predict(parser);
                 case "help": return Help();
+                case "stop": return "crunchystop";
             }
 
             return null;
@@ -33,22 +34,27 @@ namespace SC2Bot
             return "Il y a plusieurs commandes disponibles : `!player` `!top` `!predict` `!quote`\nIl suffit d'utiliser le mot clé \"**-help**\" pour plus d'information, example :\n`!predict -help`";
         }
 
-        public static async Task<string> Player(Parser parser)
+        public static async Task<string> Player(Parser parser, Discord.Server s = null, Discord.User u = null)
         {
             if (parser.Parameters == null)
-                return "Il manque des paramètres.\nLa syntaxe correcte est : \n `!search mot_clé)`";
+                return "Il manque des paramètres.\nLa syntaxe correcte est : \n ```!search mot_clé```";
 
             if (parser.Parameters[0] == "-help")
-                return "Recherche un joueur sur Aligulac, si les informations sont disponibles, la team ainsi que la page liquipedia est retournée.\nLa syntaxe à utiliser est : \n `!player pseudo)`";
+                return "Recherche un joueur sur Aligulac, si les informations sont disponibles, la team ainsi que la page liquipedia est retournée.\nLa syntaxe à utiliser est : \n ```!player pseudo```";
 
             return Aligulac.ShowPlayerObject(await Aligulac.Player(parser.Parameters[0]));
         }
 
-        public static async Task<string> Predict(Parser parser)
+        public static async Task<string> Predict(Parser parser, Discord.Server s = null, Discord.User u = null)
         {
 
             if (parser.Parameters == null)
-                return "Il manque des paramètres.\nLa syntaxe correcte est : \n `!predict Player_A Player_B (Optionnel BO_nb)`\n\nExample :\n `!predict ByuN Dark 3`";
+                return "Il manque des paramètres.\n"
+                     + "La syntaxe correcte est : \n"
+                     + "```!predict Player_A Player_B (Optionnel BO_nb)```\n\n"
+                     + "Example :\n"
+                     + "```!predict ByuN Dark 3```";
+
 
             if (parser.Parameters[0] == "-help")
                 return "Utilise le système de prédiction d'Aligulac (http://aligulac.com/inference/).\nLa syntaxe à utiliser est : \n`!predict Player_A Player_B (Optionnel BO_nb)`\n\nExample :\n`!predict ByuN Dark 3`";
@@ -86,20 +92,20 @@ namespace SC2Bot
                 return retPred.Error;
         }
 
-        public static async Task<string> Top(Parser parser)
+        public static async Task<string> Top(Parser parser, Discord.Server s = null, Discord.User u = null)
         {
             if (parser.Parameters != null
                 && parser.Parameters.Length == 1
                 && parser.Parameters[0] == "-help")
-                return "Utilise le système de classement d'Aligulac.\nLa syntaxe à utiliser est : \n`!top (Optionnel nombre_de_joueur)`\n\nExample :\n`!top 20`";
+                return "Utilise le système de classement d'Aligulac.\nLa syntaxe à utiliser est : \n```!top```";
 
             int topNb = 10;
-            if (parser.Parameters != null)
+            if (parser.Parameters != null && Helpers.Discord.IsAdmin(u))
                 int.TryParse(parser.Parameters[0], out topNb);
             return Aligulac.ShowTopObject(await Aligulac.Top(topNb));
         }
 
-        public static async Task<string> Quote(Parser parser, Discord.User u)
+        public static async Task<string> Quote(Parser parser, Discord.Server s = null, Discord.User u = null)
         {
             var allQuotes = new SC2Quotes();
             var quote = new QuoteOfTheDay.Datas.Quote();
@@ -136,7 +142,7 @@ namespace SC2Bot
                     return allQuotes.FormatQuote(quote, $"Je n'ai pas de quote pour {parser.Parameters[0]}\nMais celle là est pas mal quand même :\n");
                 }
             }
-                        
+
             quote = allQuotes.RandomQuote();
             return allQuotes.FormatQuote(quote);
         }

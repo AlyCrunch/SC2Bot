@@ -9,6 +9,7 @@ namespace SC2Bot.Helpers
 {
     public static class Discord
     {
+
         public static async Task ClearAndAddRole(Server server, User user, Role role)
         {
             var u = server.Users.Where(x => x.Id == user.Id).First();
@@ -21,6 +22,14 @@ namespace SC2Bot.Helpers
                     await u.RemoveRoles(r);
 
             await u.AddRoles(role);
+        }
+
+        public static bool IsAdmin(User u, bool SuperAdmin = false, ulong SuperAdminID = 0)
+        {
+            if(SuperAdmin)
+                return u.Id == SuperAdminID;
+
+            return u.Roles.Count(x => x.Name == "Jungsu Zerg" || x.Name == "Jungsu Protoss" || x.Name == "Jungsu Terran" || x.Name == "Gosu 💎") > 0;
         }
     }
 }

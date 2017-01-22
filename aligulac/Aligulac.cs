@@ -1,9 +1,8 @@
 ﻿using AligulacSC2.Objects;
 using RestConnect;
 using System;
-using System.Collections.Generic;
+using System.Resources;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AligulacSC2
@@ -40,13 +39,13 @@ namespace AligulacSC2
             var plBSR = await RestClient.Search(plBName);
             var plA = plASR.Players;
             var plB = plBSR.Players;
-            
+
             if (plA != null && plB != null && plA.Length > 0 && plB.Length > 0)
             {
                 return await RestClient.GetPrediction(plA[0].ID.ToString(), plB[0].ID.ToString(), BO, _KEY_);
             }
 
-            return new Prediction() { Error = "Désolé, je ne peux pas faire de prédiction avec des nonames :kappa:" };
+            return new Prediction() { Error = $"Désolé, je ne peux pas faire de prédiction avec des nonames {Properties.Resources.Kappa_Emoji}" };
         }
 
         static async public Task<Players> Top(int nb = 10)
@@ -66,7 +65,7 @@ namespace AligulacSC2
             if (pl.ID != null)
                 return $"{PlayerToString(pl)} \n {PlayerLiquipediaToString(pl)}";
             else
-                return "Désolé, je ne connais pas ce noname :kappa:";
+                return $"Désolé, je ne connais pas ce noname {Properties.Resources.Kappa_Emoji}";
         }
 
         static public string ShowPredictionObject(Prediction p)
@@ -91,26 +90,26 @@ namespace AligulacSC2
             foreach (Player p in ps.PlayersResult)
             {
                 i++;
-                rtnStr += $"{i}\t{PlayerToString(p, true)}\n";
+                rtnStr += $"{Position(i, ps.PlayersResult.Count())}\t{PlayerToString(p, false, false)}\n";
             }
             return rtnStr;
         }
 
         //** Micro-Format **//
 
-        static private string PlayerToString(Player pl, bool BoldName = false)
+        static private string PlayerToString(Player pl, bool BoldName = false, bool ShowTeam = true)
         {
             var name = pl.Tag;
 
             if (BoldName)
                 name = $"**{pl.Tag}**";
 
-            return $":flag_{pl.Country.ToLower()}: ({pl.Race}) {PlayerCurrentTeamToString(pl)}{name}";
+            return $":flag_{pl.Country.ToLower()}: {Race(pl.Race)} {PlayerCurrentTeamToString(pl, ShowTeam)}{name}";
         }
 
-        static private string PlayerCurrentTeamToString(Player pl)
+        static private string PlayerCurrentTeamToString(Player pl, bool showTeam)
         {
-            if (pl.CurrentTeams != null && pl.CurrentTeams.Length > 0)
+            if (showTeam && pl.CurrentTeams != null && pl.CurrentTeams.Length > 0)
             {
                 Team t = pl.CurrentTeams[0].Team;
                 return $"[{t.Name}]";
@@ -127,6 +126,38 @@ namespace AligulacSC2
             }
 
             return "";
+        }
+
+        static private string Race(string r)
+        {
+            switch (r)
+            {
+                case "Z": return Properties.Resources.Zerg_Emoji;
+                case "P": return Properties.Resources.Protoss_Emoji;
+                case "T": return Properties.Resources.Terran_Emoji;
+                case "R": return Properties.Resources.Random_Emoji;
+                default: return $"({r})";
+            }
+        }
+
+        static private string Position(int p, int nbMax = 10)
+        {
+            if (nbMax > 10) return $"({p})";
+            
+            switch(p)
+            {
+                case 1:return ":one:"; 
+                case 2:return ":two:"; 
+                case 3:return ":three:"; 
+                case 4:return ":four:"; 
+                case 5:return ":five:"; 
+                case 6:return ":six:"; 
+                case 7:return ":seven:"; 
+                case 8:return ":eight:"; 
+                case 9:return ":nine:"; 
+                case 10:return ":keycap_ten:"; 
+                default:return ":zero:"; 
+            }
         }
 
         //** Easter Egg **//
