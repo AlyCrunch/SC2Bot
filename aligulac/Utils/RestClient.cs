@@ -72,7 +72,7 @@ namespace RestConnect
             return playerObj;
         }
 
-        static public async Task<Players> GetTopPlayers(string limit, string key)
+        static public async Task<GenericResult<Player>> GetTopPlayers(string limit, string key)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
             dic.Add("current_rating__isnull", "false");
@@ -82,14 +82,14 @@ namespace RestConnect
             dic.Add("apikey", key);
             string parameters = BuildParameters(dic);
 
-            Players playersObj = null;
+            GenericResult<Player> playersObj = null;
 
             try
             {
                 HttpResponseMessage response = await client.GetAsync(endPoint + playersRoot + parameters);
                 if (response.IsSuccessStatusCode)
                 {
-                    playersObj = await response.Content.ReadAsAsync<Players>();
+                    playersObj = await response.Content.ReadAsAsync<GenericResult<Player>>();
                 }
             }
             catch (Exception e)

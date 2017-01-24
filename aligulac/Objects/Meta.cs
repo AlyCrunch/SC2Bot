@@ -1,15 +1,12 @@
 ﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace AligulacSC2.Objects
 {
-    public class Players
-    {
-        [JsonProperty(PropertyName = "meta")]
-        public Meta Metadata { get; set; }
-        [JsonProperty(PropertyName = "objects")]
-        public Player[] PlayersResult { get; set; }
-    }
-
     public class Meta
     {
         [JsonProperty(PropertyName = "limit")]
@@ -23,5 +20,4 @@ namespace AligulacSC2.Objects
         [JsonProperty(PropertyName = "total_count")]
         public int Total { get; set; }
     }
-    
 }

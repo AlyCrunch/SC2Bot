@@ -57,8 +57,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aligulac.cs" />
+    <Compile Include="Objects\Meta.cs" />
+    <Compile Include="Objects\Period.cs" />
     <Compile Include="Objects\Player.cs" />
-    <Compile Include="Objects\Players.cs" />
+    <Compile Include="Objects\GenericResult.cs" />
     <Compile Include="Objects\Prediction.cs" />
     <Compile Include="Objects\Rating.cs" />
     <Compile Include="Objects\SearchResult.cs" />

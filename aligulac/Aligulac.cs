@@ -48,7 +48,7 @@ namespace AligulacSC2
             return new Prediction() { Error = $"Désolé, je ne peux pas faire de prédiction avec des nonames {Properties.Resources.Kappa_Emoji}" };
         }
 
-        static async public Task<Players> Top(int nb = 10)
+        static async public Task<GenericResult<Player>> Top(int nb = 10)
         {
             return await RestClient.GetTopPlayers(nb.ToString(), _KEY_);
         }
@@ -83,14 +83,14 @@ namespace AligulacSC2
             return result;
         }
 
-        static public string ShowTopObject(Players ps)
+        static public string ShowTopObject(GenericResult<Player> ps)
         {
             var i = 0;
             string rtnStr = string.Empty;
-            foreach (Player p in ps.PlayersResult)
+            foreach (Player p in ps.Results)
             {
                 i++;
-                rtnStr += $"{Position(i, ps.PlayersResult.Count())}\t{PlayerToString(p, false, false)}\n";
+                rtnStr += $"{Position(i, ps.Results.Count())}\t{PlayerToString(p, false, false)}\n";
             }
             return rtnStr;
         }
