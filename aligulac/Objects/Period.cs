@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,16 +9,36 @@ namespace AligulacSC2.Objects
 {
     public class Period
     {
-        public int id { get; set; }
-        public float dom_p { get; set; }
-        public float dom_t { get; set; }
-        public float dom_z { get; set; }
-        public string end { get; set; }
-        public string start { get; set; }
-        public bool needs_recompute { get; set; }
-        public int num_games { get; set; }
-        public int num_newplayers { get; set; }
-        public int num_retplayers { get; set; }
-        public string resource_uri { get; set; }
+        [JsonProperty(PropertyName = "id")]
+        public int ID { get; set; }
+
+        [JsonProperty(PropertyName = "dom_p")]
+        public float DominationP { get; set; }
+        public int DominationPPer => (int)(DominationP * 100);
+        [JsonProperty(PropertyName = "dom_t")]
+        public float DominationT { get; set; }
+        public int DominationTPer => (int)(DominationT * 100);
+        [JsonProperty(PropertyName = "dom_z")]
+        public float DominationZ { get; set; }
+        public int DominationZPer => (int)(DominationZ * 100);
+
+        [JsonProperty(PropertyName = "start")]
+        public string Start { get; set; }
+        public DateTime StartDate => DateTime.ParseExact(Start, "yyyy-MM-dd", null);
+        [JsonProperty(PropertyName = "end")]
+        public string End { get; set; }
+        public DateTime EndDate => DateTime.ParseExact(End, "yyyy-MM-dd", null);
+
+        [JsonProperty(PropertyName = "num_games")]
+        public int NumGames { get; set; }
+        [JsonProperty(PropertyName = "num_newplayers")]
+        public int NumNewPlayers { get; set; }
+        [JsonProperty(PropertyName = "num_retplayers")]
+        public int NumReturningPlayers { get; set; }
+
+        [JsonProperty(PropertyName = "needs_recompute")]
+        public bool NeedsRecompute { get; set; }
+        [JsonProperty(PropertyName = "resource_uri")]
+        public string ResourceURI { get; set; }
     }
 }
