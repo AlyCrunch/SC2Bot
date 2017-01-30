@@ -8,9 +8,12 @@ namespace SC2Bot
 {
     public static class Commands
     {
-        public static async Task<string> SelectCommands(string query, Discord.Server s = null, Discord.User u = null)
+        public static async Task<string> SelectCommands(string query, Discord.Server s = null, Discord.User u = null, bool isPM = false)
         {
-            if (query[0] != '!') return null;
+            if (IsRaceAssignement(query) && isPM)
+                return await AssignRace(query.ToLower(), s, u);
+
+                if (query[0] != '!') return null;
 
             var parser = new Parser(query);
 
@@ -22,8 +25,8 @@ namespace SC2Bot
                 case "top": return await Top(parser, s, u);
                 case "player": return await Player(parser);
                 case "predict": return await Predict(parser);
+                case "balance": return await Balance(parser);
                 case "help": return Help();
-                case "stop": return "crunchystop";
             }
 
             return null;
@@ -31,36 +34,40 @@ namespace SC2Bot
 
         public static string Help()
         {
-            return "Il y a plusieurs commandes disponibles : `!player` `!top` `!predict` `!quote`\nIl suffit d'utiliser le mot clé \"**-help**\" pour plus d'information, example :\n`!predict -help`";
+            return Properties.Resources.HelpCommand;
         }
 
         public static async Task<string> Player(Parser parser, Discord.Server s = null, Discord.User u = null)
         {
             if (parser.Parameters == null)
-                return "Il manque des paramètres.\nLa syntaxe correcte est : \n ```!search mot_clé```";
+                return Properties.Resources.PlayerCommandMissing;
 
             if (parser.Parameters[0] == "-help")
-                return "Recherche un joueur sur Aligulac, si les informations sont disponibles, la team ainsi que la page liquipedia est retournée.\nLa syntaxe à utiliser est : \n ```!player pseudo```";
+                return Properties.Resources.PlayerCommandHelp;
 
             return Aligulac.ShowPlayerObject(await Aligulac.Player(parser.Parameters[0]));
+        }
+
+        public static async Task<string> Balance(Parser parser, Discord.Server s = null, Discord.User u = null)
+        {
+            if (parser.Parameters != null && parser.Parameters.Length > 0 && parser.Parameters[0] == "-help")
+                return "";
+
+            return Aligulac.ShowPeriodObject(await Aligulac.Balance());
         }
 
         public static async Task<string> Predict(Parser parser, Discord.Server s = null, Discord.User u = null)
         {
 
             if (parser.Parameters == null)
-                return "Il manque des paramètres.\n"
-                     + "La syntaxe correcte est : \n"
-                     + "```!predict Player_A Player_B (Optionnel BO_nb)```\n\n"
-                     + "Example :\n"
-                     + "```!predict ByuN Dark 3```";
+                return Properties.Resources.PredictCommandMissing;
 
 
             if (parser.Parameters[0] == "-help")
-                return "Utilise le système de prédiction d'Aligulac (http://aligulac.com/inference/).\nLa syntaxe à utiliser est : \n`!predict Player_A Player_B (Optionnel BO_nb)`\n\nExample :\n`!predict ByuN Dark 3`";
+                return Properties.Resources.PredictCommandHelp;
 
             if (parser.Parameters.Length < 2)
-                return "Il manque des paramètres.\nLa syntaxe correcte est : \n `!predict Player_A Player_B (Optionnel BO_nb)`\n\nExample :\n `!predict ByuN Dark 3`";
+                return Properties.Resources.PredictCommandMissing;
 
             #region EasterEggCrunchyPredict
             if (parser.Parameters[0].ToLower() == "crunchy" || parser.Parameters[1].ToLower() == "crunchy")
@@ -97,7 +104,7 @@ namespace SC2Bot
             if (parser.Parameters != null
                 && parser.Parameters.Length == 1
                 && parser.Parameters[0] == "-help")
-                return "Utilise le système de classement d'Aligulac.\nLa syntaxe à utiliser est : \n```!top```";
+                return Properties.Resources.TopCommandHelp;
 
             int topNb = 10;
             if (parser.Parameters != null && Helpers.Discord.IsAdmin(u))
@@ -111,18 +118,12 @@ namespace SC2Bot
             var quote = new QuoteOfTheDay.Datas.Quote();
 
             if (parser.Parameters != null && parser.Parameters[0] == "-help")
-                return "Retourne une quote SC2 via le site sc2quoteoftheday.com (et plus)\n"
-                    + "La syntaxe à utiliser est : `!quote (optionnel auteur) (optionnel -count)`\n"
-                    + "Exemple :\n```\n"
-                    + "# Récupère les quotes de l'auteur cité\n!quote Day9\n\n"
-                    + "# Retourne le nombre de quote pour l'auteur cité\n!quote Day9 -count\n\n"
-                    + "# Retourne tous les auteurs de quotes (en message privé)\n!quote -all```";
-
+                return Properties.Resources.QuoteCommandHelp;
 
             if (parser.Parameters != null && parser.Parameters[0] == "-all")
             {
                 await u.SendMessage(allQuotes.FormatAuthors(allQuotes.AllAuthor()));
-                return "Liste envoyée en MP.";
+                return Properties.Resources.QuoteCommandSendMP;
             }
 
             if (parser.Parameters != null && parser.Parameters.Count() > 1 && parser.Parameters[1] == "-count")
@@ -139,12 +140,48 @@ namespace SC2Bot
                 else
                 {
                     quote = allQuotes.RandomQuote();
-                    return allQuotes.FormatQuote(quote, $"Je n'ai pas de quote pour {parser.Parameters[0]}\nMais celle là est pas mal quand même :\n");
+                    return allQuotes.FormatQuote(quote, string.Format(Properties.Resources.QuoteCommandNotFound, parser.Parameters[0]));
                 }
             }
 
             quote = allQuotes.RandomQuote();
             return allQuotes.FormatQuote(quote);
+        }
+
+        public static async Task<string> AssignRace(string race, Discord.Server s = null, Discord.User u = null)
+        {
+            var zRole = s.FindRoles("Zerg", true).First();
+            var tRole = s.FindRoles("Terran", true).First();
+            var pRole = s.FindRoles("Protoss", true).First();
+            var rRole = s.FindRoles("Random", true).First();
+
+            switch (race)
+            {
+                case "zerg":
+                    await Helpers.Discord.ClearAndAddRole(s, u, zRole);
+                    return Properties.Resources.ZergQuote;
+                case "protoss":
+                    await Helpers.Discord.ClearAndAddRole(s, u, pRole);
+                    return Properties.Resources.ProtossQuote;
+                case "terran":
+                    await Helpers.Discord.ClearAndAddRole(s, u, tRole);
+                    return Properties.Resources.TerranQuote;
+                case "random":
+                    await Helpers.Discord.ClearAndAddRole(s, u, rRole);
+                    return Properties.Resources.RandomQuote;
+            }
+
+            return null;
+        }
+
+        private static bool IsRaceAssignement(string q)
+        {
+            if (q == "zerg" ||
+                q == "protoss" ||
+                q == "terran" ||
+                q == "random")
+                return true;
+            return false;
         }
     }
 }

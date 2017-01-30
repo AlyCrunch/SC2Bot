@@ -117,19 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Kappa_Emoji" xml:space="preserve">
-    <value>&lt;:kappa:265286182403833873&gt;</value>
+  <data name="HelpCommand" xml:space="preserve">
+    <value>Il y a plusieurs commandes disponibles : `!player` `!top` `!predict` `!quote`\nIl suffit d'utiliser le mot clé \"**-help**\" pour plus d'information, example :\n`!predict -help`</value>
   </data>
-  <data name="Protoss_Emoji" xml:space="preserve">
-    <value>&lt;:protoss:272809554553602049&gt;</value>
+  <data name="PlayerCommandHelp" xml:space="preserve">
+    <value>Recherche un joueur sur Aligulac, si les informations sont disponibles, la team ainsi que la page liquipedia est retournée.\nLa syntaxe à utiliser est : \n ```!player pseudo```</value>
   </data>
-  <data name="Random_Emoji" xml:space="preserve">
-    <value>&lt;:random:272816235752849409&gt;</value>
+  <data name="PlayerCommandMissing" xml:space="preserve">
+    <value>Il manque des paramètres.\nLa syntaxe correcte est : \n ```!search mot_clé```</value>
   </data>
-  <data name="Terran_Emoji" xml:space="preserve">
-    <value>&lt;:terran:272812377513394186&gt;</value>
+  <data name="PredictCommandHelp" xml:space="preserve">
+    <value>Utilise le système de prédiction d'Aligulac (http://aligulac.com/inference/).\nLa syntaxe à utiliser est : \n```!predict Player_A Player_B (Optionnel BO_nb)```\n\nExample :\n```!predict ByuN Dark 3```</value>
   </data>
-  <data name="Zerg_Emoji" xml:space="preserve">
-    <value>&lt;:zerg:272812425185853441&gt;</value>
+  <data name="PredictCommandMissing" xml:space="preserve">
+    <value>Il manque des paramètres.\nLa syntaxe correcte est :\n```!predict Player_A Player_B (Optionnel BO_nb)```\n\nExample :\n ```!predict ByuN Dark 3```</value>
+  </data>
+  <data name="ProtossQuote" xml:space="preserve">
+    <value>My life for Aiur !</value>
+  </data>
+  <data name="QuoteCommandHelp" xml:space="preserve">
+    <value>Retourne une quote SC2 via le site sc2quoteoftheday.com (et plus)\nLa syntaxe à utiliser est : `!quote (optionnel auteur) (optionnel -count)`\nExemple :\n```\n# Récupère les quotes de l'auteur cité\n!quote Day9\n\n# Retourne le nombre de quote pour l'auteur cité\n!quote Day9 -count\n\n# Retourne tous les auteurs de quotes (en message privé)\n!quote -all```</value>
+  </data>
+  <data name="QuoteCommandNotFound" xml:space="preserve">
+    <value>Je n'ai pas de quote pour {0}\nMais celle là est pas mal quand même :\n</value>
+  </data>
+  <data name="QuoteCommandSendMP" xml:space="preserve">
+    <value>Liste envoyée en MP.</value>
+  </data>
+  <data name="RandomQuote" xml:space="preserve">
+    <value>Pour les hommes !</value>
+  </data>
+  <data name="TerranQuote" xml:space="preserve">
+    <value>Kaboom Baby !</value>
+  </data>
+  <data name="TopCommandHelp" xml:space="preserve">
+    <value>Utilise le système de classement d'Aligulac.\nLa syntaxe à utiliser est : \n```!top```</value>
+  </data>
+  <data name="WelcomeStr" xml:space="preserve">
+    <value>Bienvenue !\nQuelle race joues-tu ?\nécris : **Zerg**, **Terran**, **Protoss** ou **Random**</value>
+  </data>
+  <data name="ZergQuote" xml:space="preserve">
+    <value>For the Swarm ♥</value>
   </data>
 </root>

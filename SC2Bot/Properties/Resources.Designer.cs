@@ -61,47 +61,128 @@ namespace SC2Bot.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;:kappa:265286182403833873&gt;.
+        ///   Recherche une chaîne localisée semblable à Il y a plusieurs commandes disponibles : `!player` `!top` `!predict` `!quote`\nIl suffit d&apos;utiliser le mot clé \&quot;**-help**\&quot; pour plus d&apos;information, example :\n`!predict -help`.
         /// </summary>
-        internal static string Kappa_Emoji {
+        internal static string HelpCommand {
             get {
-                return ResourceManager.GetString("Kappa_Emoji", resourceCulture);
+                return ResourceManager.GetString("HelpCommand", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;:protoss:272809554553602049&gt;.
+        ///   Recherche une chaîne localisée semblable à Recherche un joueur sur Aligulac, si les informations sont disponibles, la team ainsi que la page liquipedia est retournée.\nLa syntaxe à utiliser est : \n ```!player pseudo```.
         /// </summary>
-        internal static string Protoss_Emoji {
+        internal static string PlayerCommandHelp {
             get {
-                return ResourceManager.GetString("Protoss_Emoji", resourceCulture);
+                return ResourceManager.GetString("PlayerCommandHelp", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;:random:272816235752849409&gt;.
+        ///   Recherche une chaîne localisée semblable à Il manque des paramètres.\nLa syntaxe correcte est : \n ```!search mot_clé```.
         /// </summary>
-        internal static string Random_Emoji {
+        internal static string PlayerCommandMissing {
             get {
-                return ResourceManager.GetString("Random_Emoji", resourceCulture);
+                return ResourceManager.GetString("PlayerCommandMissing", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;:terran:272812377513394186&gt;.
+        ///   Recherche une chaîne localisée semblable à Utilise le système de prédiction d&apos;Aligulac (http://aligulac.com/inference/).\nLa syntaxe à utiliser est : \n```!predict Player_A Player_B (Optionnel BO_nb)```\n\nExample :\n```!predict ByuN Dark 3```.
         /// </summary>
-        internal static string Terran_Emoji {
+        internal static string PredictCommandHelp {
             get {
-                return ResourceManager.GetString("Terran_Emoji", resourceCulture);
+                return ResourceManager.GetString("PredictCommandHelp", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;:zerg:272812425185853441&gt;.
+        ///   Recherche une chaîne localisée semblable à Il manque des paramètres.\nLa syntaxe correcte est :\n```!predict Player_A Player_B (Optionnel BO_nb)```\n\nExample :\n ```!predict ByuN Dark 3```.
         /// </summary>
-        internal static string Zerg_Emoji {
+        internal static string PredictCommandMissing {
             get {
-                return ResourceManager.GetString("Zerg_Emoji", resourceCulture);
+                return ResourceManager.GetString("PredictCommandMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à My life for Aiur !.
+        /// </summary>
+        internal static string ProtossQuote {
+            get {
+                return ResourceManager.GetString("ProtossQuote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Retourne une quote SC2 via le site sc2quoteoftheday.com (et plus)\nLa syntaxe à utiliser est : `!quote (optionnel auteur) (optionnel -count)`\nExemple :\n```\n# Récupère les quotes de l&apos;auteur cité\n!quote Day9\n\n# Retourne le nombre de quote pour l&apos;auteur cité\n!quote Day9 -count\n\n# Retourne tous les auteurs de quotes (en message privé)\n!quote -all```.
+        /// </summary>
+        internal static string QuoteCommandHelp {
+            get {
+                return ResourceManager.GetString("QuoteCommandHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Je n&apos;ai pas de quote pour {0}\nMais celle là est pas mal quand même :\n.
+        /// </summary>
+        internal static string QuoteCommandNotFound {
+            get {
+                return ResourceManager.GetString("QuoteCommandNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Liste envoyée en MP..
+        /// </summary>
+        internal static string QuoteCommandSendMP {
+            get {
+                return ResourceManager.GetString("QuoteCommandSendMP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Pour les hommes !.
+        /// </summary>
+        internal static string RandomQuote {
+            get {
+                return ResourceManager.GetString("RandomQuote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Kaboom Baby !.
+        /// </summary>
+        internal static string TerranQuote {
+            get {
+                return ResourceManager.GetString("TerranQuote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Utilise le système de classement d&apos;Aligulac.\nLa syntaxe à utiliser est : \n```!top```.
+        /// </summary>
+        internal static string TopCommandHelp {
+            get {
+                return ResourceManager.GetString("TopCommandHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Bienvenue !\nQuelle race joues-tu ?\nécris : **Zerg**, **Terran**, **Protoss** ou **Random**.
+        /// </summary>
+        internal static string WelcomeStr {
+            get {
+                return ResourceManager.GetString("WelcomeStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à For the Swarm ♥.
+        /// </summary>
+        internal static string ZergQuote {
+            get {
+                return ResourceManager.GetString("ZergQuote", resourceCulture);
             }
         }
     }

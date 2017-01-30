@@ -53,6 +53,11 @@ namespace AligulacSC2
             return await RestClient.GetTopPlayers(nb.ToString(), _KEY_);
         }
 
+        static async public Task<GenericResult<Period>> Balance()
+        {
+            return await RestClient.GetPeriods(_KEY_);
+        }
+
         //** Format **//
 
         static public string ShowSearchResult(SearchResult s)
@@ -91,6 +96,17 @@ namespace AligulacSC2
             {
                 i++;
                 rtnStr += $"{Position(i, ps.Results.Count())}\t{PlayerToString(p, false, false)}\n";
+            }
+            return rtnStr;
+        }
+
+        static public string ShowPeriodObject(GenericResult<Period> ps)
+        {
+            string rtnStr = string.Empty;
+            foreach (Period p in ps.Results)
+            {
+                rtnStr += $"Du {p.StartDate.ToShortDateString()} au {p.EndDate.ToShortDateString()} : "+
+                    $"{RacePeriod(p.Leading,true, false)}  {RacePeriod(p.MidRace, false, false)}  {RacePeriod(p.Lagging, false, true)}\n";
             }
             return rtnStr;
         }
@@ -158,6 +174,22 @@ namespace AligulacSC2
                 case 10:return ":keycap_ten:"; 
                 default:return ":zero:"; 
             }
+        }
+
+        static private string RacePeriod(LeadingRace r, bool isLeading, bool isLagging)
+        {
+            string icon;
+
+            if (isLeading)
+                icon = ":small_red_triangle:";
+            else if (isLagging)
+                icon = ":small_red_triangle:";
+            else icon = ":small_blue_diamond:";
+
+            if (r.isWeak || r.isOP)
+                icon = ":bangbang:";
+
+            return $"{icon} {Race(r.Race)} {r.DifferencePourcent}%";
         }
 
         //** Easter Egg **//

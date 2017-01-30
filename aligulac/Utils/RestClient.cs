@@ -18,6 +18,7 @@ namespace RestConnect
         static string searchRoot = "search/json/?q={0}";
         static string predictMatchRoot = "api/v1/predictmatch/{0},{1}/";
         static string teamRoot = "api/v1/team/{0}/";
+        static string periodRoot = "api/v1/period/";
 
         static RestClient()
         {
@@ -149,10 +150,33 @@ namespace RestConnect
             return predObj;
         }
 
+        static public async Task<GenericResult<Period>> GetPeriods(string key)
+        {
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic.Add("apikey", key);
+            string parameters = BuildParameters(dic);
+
+            GenericResult<Period> periodObj = null;
+
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(endPoint + periodRoot + parameters);
+                if (response.IsSuccessStatusCode)
+                {
+                    periodObj = await response.Content.ReadAsAsync<GenericResult<Period>>();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return periodObj;
+        }
+
         static private string BuildParameters(Dictionary<string, string> parameters)
         {
             return "?" + string.Join("&", parameters.Select(x => x.Key + "=" + x.Value).ToArray());
         }
-
     }
 }
