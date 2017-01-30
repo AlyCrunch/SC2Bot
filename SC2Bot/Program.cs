@@ -62,8 +62,12 @@ namespace SC2Bot
 
         static async Task SendMessage(string msg, Server s, User u, Channel c)
         {
-            var message = await Commands.SelectCommands(msg, s, u, c.IsPrivate);
-            if (message != null) await c.SendMessage(message);
+            var messages = await Commands.SelectCommands(msg, s, u, c.IsPrivate);
+            if (messages != null)
+            {
+                foreach (var message in messages)
+                    await c.SendMessage(message);
+            }
         }
 
         static async Task DisconnectClient(User usr)

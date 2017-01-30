@@ -61,6 +61,15 @@ namespace SC2Bot.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à lalalalala.
+        /// </summary>
+        internal static string BalanceCommandHelp {
+            get {
+                return ResourceManager.GetString("BalanceCommandHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Il y a plusieurs commandes disponibles : `!player` `!top` `!predict` `!quote`\nIl suffit d&apos;utiliser le mot clé \&quot;**-help**\&quot; pour plus d&apos;information, example :\n`!predict -help`.
         /// </summary>
         internal static string HelpCommand {
@@ -124,7 +133,7 @@ namespace SC2Bot.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Je n&apos;ai pas de quote pour {0}\nMais celle là est pas mal quand même :\n.
+        ///   Recherche une chaîne localisée semblable à Je n&apos;ai pas de quote pour **{0}**\nMais celle là est pas mal quand même :\n.
         /// </summary>
         internal static string QuoteCommandNotFound {
             get {

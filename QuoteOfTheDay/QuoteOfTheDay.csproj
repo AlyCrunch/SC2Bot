@@ -45,7 +45,6 @@
     <Compile Include="Datas\Quote.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="Datas\Quotes.xml">
       <SubType>Designer</SubType>

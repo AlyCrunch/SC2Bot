@@ -1,6 +1,7 @@
 ﻿using AligulacSC2;
 using QuoteOfTheDay;
 using SC2Bot.Helpers;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,12 +9,14 @@ namespace SC2Bot
 {
     public static class Commands
     {
-        public static async Task<string> SelectCommands(string query, Discord.Server s = null, Discord.User u = null, bool isPM = false)
+        private static System.Resources.ResourceManager _rm = Properties.Resources.ResourceManager;
+
+        public static async Task<List<string>> SelectCommands(string query, Discord.Server s = null, Discord.User u = null, bool isPM = false)
         {
             if (IsRaceAssignement(query) && isPM)
                 return await AssignRace(query.ToLower(), s, u);
 
-                if (query[0] != '!') return null;
+            if (query[0] != '!') return null;
 
             var parser = new Parser(query);
 
@@ -32,42 +35,40 @@ namespace SC2Bot
             return null;
         }
 
-        public static string Help()
+        public static List<string> Help()
         {
-            return Properties.Resources.HelpCommand;
+            return ConvertSingleReturnToList(Res("HelpCommand"));
         }
 
-        public static async Task<string> Player(Parser parser, Discord.Server s = null, Discord.User u = null)
+        public static async Task<List<string>> Player(Parser parser, Discord.Server s = null, Discord.User u = null)
         {
             if (parser.Parameters == null)
-                return Properties.Resources.PlayerCommandMissing;
+                return ConvertSingleReturnToList(Res("PlayerCommandMissing"));
 
             if (parser.Parameters[0] == "-help")
-                return Properties.Resources.PlayerCommandHelp;
+                return ConvertSingleReturnToList(Res("PlayerCommandHelp"));
 
             return Aligulac.ShowPlayerObject(await Aligulac.Player(parser.Parameters[0]));
         }
 
-        public static async Task<string> Balance(Parser parser, Discord.Server s = null, Discord.User u = null)
+        public static async Task<List<string>> Balance(Parser parser, Discord.Server s = null, Discord.User u = null)
         {
             if (parser.Parameters != null && parser.Parameters.Length > 0 && parser.Parameters[0] == "-help")
-                return "";
+                return ConvertSingleReturnToList(Res("BalanceCommandHelp"));
 
             return Aligulac.ShowPeriodObject(await Aligulac.Balance());
         }
 
-        public static async Task<string> Predict(Parser parser, Discord.Server s = null, Discord.User u = null)
+        public static async Task<List<string>> Predict(Parser parser, Discord.Server s = null, Discord.User u = null)
         {
-
             if (parser.Parameters == null)
-                return Properties.Resources.PredictCommandMissing;
-
+                return ConvertSingleReturnToList(Res("PredictCommandMissing"));
 
             if (parser.Parameters[0] == "-help")
-                return Properties.Resources.PredictCommandHelp;
+                return ConvertSingleReturnToList(Res("PredictCommandHelp"));
 
             if (parser.Parameters.Length < 2)
-                return Properties.Resources.PredictCommandMissing;
+                return ConvertSingleReturnToList(Res("PredictCommandMissing"));
 
             #region EasterEggCrunchyPredict
             if (parser.Parameters[0].ToLower() == "crunchy" || parser.Parameters[1].ToLower() == "crunchy")
@@ -96,15 +97,15 @@ namespace SC2Bot
             if (string.IsNullOrEmpty(retPred.Error))
                 return Aligulac.ShowPredictionObject(retPred);
             else
-                return retPred.Error;
+                return ConvertSingleReturnToList(retPred.Error);
         }
 
-        public static async Task<string> Top(Parser parser, Discord.Server s = null, Discord.User u = null)
+        public static async Task<List<string>> Top(Parser parser, Discord.Server s = null, Discord.User u = null)
         {
             if (parser.Parameters != null
                 && parser.Parameters.Length == 1
                 && parser.Parameters[0] == "-help")
-                return Properties.Resources.TopCommandHelp;
+                return ConvertSingleReturnToList(Res("TopCommandHelp"));
 
             int topNb = 10;
             if (parser.Parameters != null && Helpers.Discord.IsAdmin(u))
@@ -112,43 +113,50 @@ namespace SC2Bot
             return Aligulac.ShowTopObject(await Aligulac.Top(topNb));
         }
 
-        public static async Task<string> Quote(Parser parser, Discord.Server s = null, Discord.User u = null)
+        public static async Task<List<string>> Quote(Parser parser, Discord.Server s = null, Discord.User u = null)
         {
             var allQuotes = new SC2Quotes();
             var quote = new QuoteOfTheDay.Datas.Quote();
 
             if (parser.Parameters != null && parser.Parameters[0] == "-help")
-                return Properties.Resources.QuoteCommandHelp;
+                return ConvertSingleReturnToList(Res("QuoteCommandHelp"));
 
             if (parser.Parameters != null && parser.Parameters[0] == "-all")
             {
-                await u.SendMessage(allQuotes.FormatAuthors(allQuotes.AllAuthor()));
-                return Properties.Resources.QuoteCommandSendMP;
+                var messages = allQuotes.FormatAuthors(allQuotes.AllAuthor());
+                foreach (var msg in messages)
+                    await u.SendMessage(msg);
+
+                return ConvertSingleReturnToList(Res("QuoteCommandSendMP"));
             }
 
             if (parser.Parameters != null && parser.Parameters.Count() > 1 && parser.Parameters[1] == "-count")
             {
                 var nb = allQuotes.CountQuotesAuthor(parser.Parameters[0]);
-                return allQuotes.FormatNbQuote(parser.Parameters[0], nb);
+                return ConvertSingleReturnToList(
+                    allQuotes.FormatNbQuote(parser.Parameters[0], nb));
             }
 
             if (parser.Parameters != null && parser.Parameters[0] != "-help")
             {
                 var nb = allQuotes.CountQuotesAuthor(parser.Parameters[0]);
                 if (nb > 0)
-                    return allQuotes.FormatQuote(allQuotes.RandomQuoteAuthor(parser.Parameters[0]));
+                    return ConvertSingleReturnToList(
+                        allQuotes.FormatQuote(
+                            allQuotes.RandomQuoteAuthor(parser.Parameters[0])));
                 else
                 {
                     quote = allQuotes.RandomQuote();
-                    return allQuotes.FormatQuote(quote, string.Format(Properties.Resources.QuoteCommandNotFound, parser.Parameters[0]));
+                    return ConvertSingleReturnToList(
+                        allQuotes.FormatQuote(quote, string.Format(Res("QuoteCommandNotFound"), parser.Parameters[0])));
                 }
             }
 
             quote = allQuotes.RandomQuote();
-            return allQuotes.FormatQuote(quote);
+            return ConvertSingleReturnToList(allQuotes.FormatQuote(quote));
         }
 
-        public static async Task<string> AssignRace(string race, Discord.Server s = null, Discord.User u = null)
+        public static async Task<List<string>> AssignRace(string race, Discord.Server s = null, Discord.User u = null)
         {
             var zRole = s.FindRoles("Zerg", true).First();
             var tRole = s.FindRoles("Terran", true).First();
@@ -159,16 +167,16 @@ namespace SC2Bot
             {
                 case "zerg":
                     await Helpers.Discord.ClearAndAddRole(s, u, zRole);
-                    return Properties.Resources.ZergQuote;
+                    return ConvertSingleReturnToList(Res("ZergQuote"));
                 case "protoss":
                     await Helpers.Discord.ClearAndAddRole(s, u, pRole);
-                    return Properties.Resources.ProtossQuote;
+                    return ConvertSingleReturnToList(Res("ProtossQuote"));
                 case "terran":
                     await Helpers.Discord.ClearAndAddRole(s, u, tRole);
-                    return Properties.Resources.TerranQuote;
+                    return ConvertSingleReturnToList(Res("TerranQuote"));
                 case "random":
                     await Helpers.Discord.ClearAndAddRole(s, u, rRole);
-                    return Properties.Resources.RandomQuote;
+                    return ConvertSingleReturnToList(Res("RandomQuote"));
             }
 
             return null;
@@ -182,6 +190,22 @@ namespace SC2Bot
                 q == "random")
                 return true;
             return false;
+        }
+
+        private static List<string> ConvertSingleReturnToList(string msg)
+        {
+            var messToRtn = msg;
+
+            try { messToRtn = msg.Substring(0, 1999); }
+            catch { };
+
+            return new List<string>() { messToRtn };
+        }
+
+        private static string Res(string key)
+        {
+            string rtn = _rm.GetString(key);
+            return rtn.Replace("\\n", "\n");
         }
     }
 }

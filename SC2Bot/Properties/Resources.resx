@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BalanceCommandHelp" xml:space="preserve">
+    <value>lalalalala</value>
+  </data>
   <data name="HelpCommand" xml:space="preserve">
     <value>Il y a plusieurs commandes disponibles : `!player` `!top` `!predict` `!quote`\nIl suffit d'utiliser le mot clé \"**-help**\" pour plus d'information, example :\n`!predict -help`</value>
   </data>
@@ -139,7 +142,7 @@
     <value>Retourne une quote SC2 via le site sc2quoteoftheday.com (et plus)\nLa syntaxe à utiliser est : `!quote (optionnel auteur) (optionnel -count)`\nExemple :\n```\n# Récupère les quotes de l'auteur cité\n!quote Day9\n\n# Retourne le nombre de quote pour l'auteur cité\n!quote Day9 -count\n\n# Retourne tous les auteurs de quotes (en message privé)\n!quote -all```</value>
   </data>
   <data name="QuoteCommandNotFound" xml:space="preserve">
-    <value>Je n'ai pas de quote pour {0}\nMais celle là est pas mal quand même :\n</value>
+    <value>Je n'ai pas de quote pour **{0}**\nMais celle là est pas mal quand même :\n</value>
   </data>
   <data name="QuoteCommandSendMP" xml:space="preserve">
     <value>Liste envoyée en MP.</value>

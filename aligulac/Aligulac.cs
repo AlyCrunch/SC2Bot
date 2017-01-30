@@ -4,6 +4,7 @@ using System;
 using System.Resources;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace AligulacSC2
 {
@@ -59,56 +60,91 @@ namespace AligulacSC2
         }
 
         //** Format **//
-
-        static public string ShowSearchResult(SearchResult s)
+        /*
+        static public List<string> ShowSearchResult(SearchResult s)
         {
             return $"Events : {s.Events.Length }\tPlayers: {s.Players.Length}\tTeams: {s.Teams.Length}";
         }
-
-        static public string ShowPlayerObject(Player pl)
+        */
+        static public List<string> ShowPlayerObject(Player pl)
         {
             if (pl.ID != null)
-                return $"{PlayerToString(pl)} \n {PlayerLiquipediaToString(pl)}";
+                return new List<string>() { $"{PlayerToString(pl)} \n {PlayerLiquipediaToString(pl)}" };
             else
-                return $"Désolé, je ne connais pas ce noname {Properties.Resources.Kappa_Emoji}";
+                return new List<string>() { $"Désolé, je ne connais pas ce noname {Properties.Resources.Kappa_Emoji}" };
         }
 
-        static public string ShowPredictionObject(Prediction p)
+        static public List<string> ShowPredictionObject(Prediction p)
         {
-            var result = string.Empty;
-
+            List<string> result = new List<string>();
+            var str = string.Empty;
+            var temp = string.Empty;
             foreach (var pro in p.Outcomes.OrderByDescending(o => o.Prob))
             {
+                temp = string.Empty;
                 if (pro.ScoreA > pro.ScoreB)
-                    result += $"**{(pro.Prob * 100).ToString("F2")}%** \t{PlayerToString(p.PlayerA, true)} \t{pro.ScoreA} - {pro.ScoreB} \t{PlayerToString(p.PlayerB)} \n";
+                    temp = $"**{(pro.Prob * 100).ToString("F2")}%** \t{PlayerToString(p.PlayerA, true)} \t{pro.ScoreA} - {pro.ScoreB} \t{PlayerToString(p.PlayerB)} \n";
                 else
-                    result += $"**{(pro.Prob * 100).ToString("F2")}%** \t{PlayerToString(p.PlayerB, true)} \t{pro.ScoreB} - {pro.ScoreA} \t{PlayerToString(p.PlayerA)} \n";
+                    temp = $"**{(pro.Prob * 100).ToString("F2")}%** \t{PlayerToString(p.PlayerB, true)} \t{pro.ScoreB} - {pro.ScoreA} \t{PlayerToString(p.PlayerA)} \n";
+                if (str.Length + temp.Length >= 2000)
+                {
+                    result.Add(str);
+                    str = string.Empty;
+                }
+                str += temp;
             }
-            result += $":globe_with_meridians: {p.URL}";
+            if (!string.IsNullOrEmpty(str))
+            {
+                str += $":globe_with_meridians: {p.URL}";
+                result.Add(str);
+            }
             return result;
         }
 
-        static public string ShowTopObject(GenericResult<Player> ps)
+        static public List<string> ShowTopObject(GenericResult<Player> ps)
         {
             var i = 0;
-            string rtnStr = string.Empty;
+            List<string> rtnArrStr = new List<string>();
+            var rtnStr = string.Empty;
+            var tempStr = string.Empty;
             foreach (Player p in ps.Results)
             {
                 i++;
-                rtnStr += $"{Position(i, ps.Results.Count())}\t{PlayerToString(p, false, false)}\n";
+                tempStr = $"{Position(i, ps.Results.Count())}\t{PlayerToString(p, false, false)}\n";
+
+                if ((tempStr.Length + rtnStr.Length) >= 2000)
+                {
+                    rtnArrStr.Add(rtnStr);
+                    rtnStr = string.Empty;
+                }
+
+                rtnStr += tempStr;
             }
-            return rtnStr;
+            if (!string.IsNullOrEmpty(rtnStr)) rtnArrStr.Add(rtnStr);
+
+            return rtnArrStr;
         }
 
-        static public string ShowPeriodObject(GenericResult<Period> ps)
+        static public List<string> ShowPeriodObject(GenericResult<Period> ps)
         {
+            List<string> rtnArrStr = new List<string>();
             string rtnStr = string.Empty;
             foreach (Period p in ps.Results)
             {
-                rtnStr += $"Du {p.StartDate.ToShortDateString()} au {p.EndDate.ToShortDateString()} : "+
-                    $"{RacePeriod(p.Leading,true, false)}  {RacePeriod(p.MidRace, false, false)}  {RacePeriod(p.Lagging, false, true)}\n";
+                var tempStr = $"Du **{p.StartDate.ToShortDateString()}** au **{p.EndDate.ToShortDateString()}** :\n" +
+                    $"{RacePeriod(p.Leading, true, false)}  {RacePeriod(p.MidRace, false, false)}  {RacePeriod(p.Lagging, false, true)}\n\n";
+
+                if ((tempStr.Length + rtnStr.Length) >= 2000)
+                {
+                    rtnArrStr.Add(rtnStr);
+                    rtnStr = string.Empty;
+                }
+
+                rtnStr += tempStr;
             }
-            return rtnStr;
+            if (!string.IsNullOrEmpty(rtnStr)) rtnArrStr.Add(rtnStr);
+
+            return rtnArrStr;
         }
 
         //** Micro-Format **//
@@ -159,20 +195,20 @@ namespace AligulacSC2
         static private string Position(int p, int nbMax = 10)
         {
             if (nbMax > 10) return $"({p})";
-            
-            switch(p)
+
+            switch (p)
             {
-                case 1:return ":one:"; 
-                case 2:return ":two:"; 
-                case 3:return ":three:"; 
-                case 4:return ":four:"; 
-                case 5:return ":five:"; 
-                case 6:return ":six:"; 
-                case 7:return ":seven:"; 
-                case 8:return ":eight:"; 
-                case 9:return ":nine:"; 
-                case 10:return ":keycap_ten:"; 
-                default:return ":zero:"; 
+                case 1: return ":one:";
+                case 2: return ":two:";
+                case 3: return ":three:";
+                case 4: return ":four:";
+                case 5: return ":five:";
+                case 6: return ":six:";
+                case 7: return ":seven:";
+                case 8: return ":eight:";
+                case 9: return ":nine:";
+                case 10: return ":keycap_ten:";
+                default: return ":zero:";
             }
         }
 
@@ -183,22 +219,22 @@ namespace AligulacSC2
             if (isLeading)
                 icon = ":small_red_triangle:";
             else if (isLagging)
-                icon = ":small_red_triangle:";
+                icon = ":small_red_triangle_down:";
             else icon = ":small_blue_diamond:";
 
             if (r.isWeak || r.isOP)
-                icon = ":bangbang:";
+                icon += ":bangbang:";
 
-            return $"{icon} {Race(r.Race)} {r.DifferencePourcent}%";
+            return $"{icon}{Race(r.Race)} {r.DifferencePourcent}%";
         }
 
         //** Easter Egg **//
 
-        static public async Task<string> CrunchyRules(string name, int BO)
+        static public async Task<List<string>> CrunchyRules(string name, int BO)
         {
             var p = await Player(name);
-            var nbGames = BO / 2;
-            return $"**100%** \t:flag_fr: (Z) **Crunchy** \t **{Math.Ceiling(decimal.Divide(BO, 2))}** - 0 \t{PlayerToString(p)} \n";
+            var nbGames = Math.Ceiling(decimal.Divide(BO, 2));
+            return new List<string>() { $"**100%** \t:flag_fr: (Z) **Crunchy** \t **{nbGames}** - 0 \t{PlayerToString(p)} \n" };
         }
 
     }

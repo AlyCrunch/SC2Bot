@@ -48,7 +48,7 @@ namespace QuoteOfTheDay
 
         public string FormatQuote(Quote q, string Add = "")
         {
-            var rtn = $"{Add}```\n{q.Text.Replace("\\n","\n")}```\n*{q.Reference}*\n**{q.Author}** - {q.Date.ToShortDateString()}";
+            var rtn = $"{Add}```\n{q.Text.Replace("\\n", "\n")}```\n*{q.Reference}*\n**{q.Author}** - {q.Date.ToShortDateString()}";
             return rtn;
         }
 
@@ -60,10 +60,28 @@ namespace QuoteOfTheDay
                 return $"Il y a {nbQuotes} quote{((nbQuotes > 0) ? "s" : "")} pour {Auteur}";
         }
 
-        public string FormatAuthors(List<string> Author)
+        public List<string> FormatAuthors(List<string> Author)
         {
             Author.Sort();
-            return $"Liste des auteurs des quotes :\n{ string.Join(", ", Author) }";
+            List<string> rtn = new List<string>();
+            var str = "Liste des auteurs des quotes :\n";
+            var last = Author.Last();
+
+            foreach (var q in Author)
+            {
+                var tmp = q + ((q != last) ? ", " : "");
+
+                if ((str.Length + tmp.Length) >= 2000)
+                {
+                    rtn.Add(str);
+                    str = string.Empty;
+                }
+
+                str += tmp;
+            }
+            if (!string.IsNullOrEmpty(str)) rtn.Add(str);
+
+            return rtn;
         }
     }
 }

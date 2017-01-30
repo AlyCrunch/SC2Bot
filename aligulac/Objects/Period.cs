@@ -145,9 +145,9 @@ namespace AligulacSC2.Objects
             }
         }
         public float Domination { get; set; }
-        public int DominationPourcent => (int)(Domination * 100);
+        public int DominationPourcent => (int)(Math.Round((Decimal)Domination, 2, MidpointRounding.AwayFromZero) * 100);
         public float Difference => Domination - 1;
-        public int DifferencePourcent => (int)(Difference * 100);
+        public int DifferencePourcent => (int)(Math.Round((Decimal)Difference, 2, MidpointRounding.AwayFromZero) * 100);
         public bool isOP => Domination > 1.1;
         public bool isWeak => Domination < 0.9;
 
