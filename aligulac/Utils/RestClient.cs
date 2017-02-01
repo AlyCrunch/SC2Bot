@@ -12,7 +12,6 @@ namespace RestConnect
     {
         static HttpClient client = new HttpClient();
         static string endPoint = "http://aligulac.com/";
-
         static string playerRoot = "api/v1/player/{0}/";
         static string playersRoot = "api/v1/player/";
         static string searchRoot = "search/json/?q={0}";
@@ -150,12 +149,12 @@ namespace RestConnect
             return predObj;
         }
 
-        static public async Task<GenericResult<Period>> GetPeriods(string key)
+        static public async Task<GenericResult<Period>> GetPeriods(string key, int limit = 0)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
             dic.Add("apikey", key);
             dic.Add("order_by", "end");
-            dic.Add("limit", "0");
+            dic.Add("limit", limit.ToString());
             string parameters = BuildParameters(dic);
 
             GenericResult<Period> periodObj = null;

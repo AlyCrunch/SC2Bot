@@ -29,7 +29,11 @@ namespace SC2Bot.Helpers
             if(SuperAdmin)
                 return u.Id == SuperAdminID;
 
-            return u.Roles.Count(x => x.Name == "Jungsu Zerg" || x.Name == "Jungsu Protoss" || x.Name == "Jungsu Terran" || x.Name == "Gosu 💎") > 0;
+            return u.Roles.Count(
+                x => x.Name == "Jungsu Zerg" 
+                || x.Name == "Jungsu Protoss" 
+                || x.Name == "Jungsu Terran" 
+                || x.Name == "Gosu 💎") > 0;
         }
     }
 }

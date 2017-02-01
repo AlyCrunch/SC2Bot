@@ -54,9 +54,24 @@ namespace AligulacSC2
             return await RestClient.GetTopPlayers(nb.ToString(), _KEY_);
         }
 
-        static async public Task<GenericResult<Period>> Balance()
+        static async public Task<GenericResult<Period>> Balance(DateTime From, DateTime To, bool avg, bool op, bool wk, int limit = 0)
         {
-            return await RestClient.GetPeriods(_KEY_);
+            var listP = await RestClient.GetPeriods(_KEY_, limit);
+
+
+            if (From != new DateTime())
+                listP.Results = FilterFromToPeriod(listP, From, To);
+
+            if (op)
+                listP.Results = OpPeriod(listP);
+
+            if (wk)
+                listP.Results = WeakPeriod(listP);
+
+            if (avg)
+                listP.Results = AveragePeriod(listP);
+
+            return listP;
         }
 
         //** Format **//
@@ -125,7 +140,7 @@ namespace AligulacSC2
             return rtnArrStr;
         }
 
-        static public List<string> ShowPeriodObject(GenericResult<Period> ps)
+        static public List<string> ShowPeriodObject(GenericResult<Period> ps, bool isLL, bool isOp, bool isAvg)
         {
             List<string> rtnArrStr = new List<string>();
             string rtnStr = string.Empty;
@@ -139,10 +154,36 @@ namespace AligulacSC2
                     rtnArrStr.Add(rtnStr);
                     rtnStr = string.Empty;
                 }
-
                 rtnStr += tempStr;
             }
-            if (!string.IsNullOrEmpty(rtnStr)) rtnArrStr.Add(rtnStr);
+
+
+            if (!string.IsNullOrEmpty(rtnStr))
+            {
+                var bresume = string.Empty;
+                if (isLL)
+                    bresume = BalanceResume(ps.Results, isOp);
+
+                if (isLL && isAvg)
+                {
+                    rtnArrStr.Clear();
+                    rtnStr = bresume;
+                    rtnArrStr.Add(rtnStr);
+                }
+                else
+                {
+                    if (bresume.Length + rtnStr.Length > 2000)
+                    {
+                        rtnArrStr.Add(rtnStr);
+                        rtnStr = bresume;
+                    }
+                    else
+                        rtnStr += bresume;
+                        
+                    rtnArrStr.Add(rtnStr);
+                }
+
+            }
 
             return rtnArrStr;
         }
@@ -216,16 +257,80 @@ namespace AligulacSC2
         {
             string icon;
 
-            if (isLeading)
-                icon = ":small_red_triangle:";
-            else if (isLagging)
-                icon = ":small_red_triangle_down:";
+            if (isLeading) icon = ":small_red_triangle:";
+            else if (isLagging) icon = ":small_red_triangle_down:";
             else icon = ":small_blue_diamond:";
 
-            if (r.isWeak || r.isOP)
-                icon += ":bangbang:";
+            if (r.isOP) icon = ":bangbang:";
+            if (r.isWeak) icon = ":interrobang:";
 
             return $"{icon}{Race(r.Race)} {r.DifferencePourcent}%";
+        }
+
+        static private string BalanceResume(Period[] ps, bool isOp)
+        {
+            var Start = ps[0].StartDate;
+            var End = ps[ps.Length - 1].EndDate;
+
+            var nbP = 0;
+            var nbT = 0;
+            var nbZ = 0;
+            var prefix = (isOp) ? "Ont été **OP**" : "Ont été **weak**";
+            nbP = (isOp) ? ps.Count(x => x.Leading.isOP && x.Leading.Race == "P") :
+                ps.Count(x => x.Lagging.isWeak && x.Lagging.Race == "P");
+            nbT = (isOp) ? ps.Count(x => x.Leading.isOP && x.Leading.Race == "T") :
+                ps.Count(x => x.Lagging.isWeak && x.Lagging.Race == "T");
+            nbZ = (isOp) ? ps.Count(x => x.Leading.isOP && x.Leading.Race == "Z") :
+                ps.Count(x => x.Lagging.isWeak && x.Lagging.Race == "Z");
+
+            return $"{prefix} du **{Start.ToShortDateString()}** au **{End.ToShortDateString()}** :\n{Race("P")} {nbP} fois, {Race("T")} {nbT} fois, {Race("Z")} {nbZ} fois";
+        }
+
+        //** Balance **//
+
+        static private Period[] FilterFromToPeriod(GenericResult<Period> p, DateTime f, DateTime t)
+        {
+            var tempList = p.Results.Where(x => x.StartDate >= f && x.EndDate <= t).ToArray();
+            return tempList;
+        }
+
+        static private Period[] AveragePeriod(GenericResult<Period> pt)
+        {
+            Period p = new Period();
+            var ps = pt.Results;
+            int l = ps.Length;
+            string from = ps[0].Start;
+            string to = ps[l - 1].End;
+            float dP = 0;
+            float dT = 0;
+            float dZ = 0;
+
+            foreach (Period tp in ps)
+            {
+                dP += tp.DominationP;
+                dT += tp.DominationT;
+                dZ += tp.DominationZ;
+            }
+
+            p.Start = from;
+            p.End = to;
+            p.DominationP = dP / l;
+            p.DominationT = dT / l;
+            p.DominationZ = dZ / l;
+
+            return new Period[] { p };
+        }
+
+        static private Period[] OpPeriod(GenericResult<Period> pt)
+        {
+            var ps = pt.Results;
+            return ps.Where(x => x.Leading.isOP).ToArray();
+        }
+
+        static private Period[] WeakPeriod(GenericResult<Period> pt)
+        {
+            var ps = pt.Results;
+            return ps.Where(x => x.Lagging.isWeak).ToArray();
         }
 
         //** Easter Egg **//

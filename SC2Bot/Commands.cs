@@ -1,6 +1,7 @@
 ﻿using AligulacSC2;
 using QuoteOfTheDay;
 using SC2Bot.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace SC2Bot
                 case "top": return await Top(parser, s, u);
                 case "player": return await Player(parser);
                 case "predict": return await Predict(parser);
-                case "balance": return await Balance(parser);
+                case "balance": return await Balance(parser, s, u);
                 case "help": return Help();
             }
 
@@ -53,10 +54,78 @@ namespace SC2Bot
 
         public static async Task<List<string>> Balance(Parser parser, Discord.Server s = null, Discord.User u = null)
         {
+            var err = string.Empty;
+            DateTime fromDate = new DateTime(), toDate = new DateTime();
+            var from = false;
+            var average = false;
+            var op = false;
+            var weak = false;
+            var limit = 10;
+
             if (parser.Parameters != null && parser.Parameters.Length > 0 && parser.Parameters[0] == "-help")
                 return ConvertSingleReturnToList(Res("BalanceCommandHelp"));
 
-            return Aligulac.ShowPeriodObject(await Aligulac.Balance());
+            if (parser.Parameters.Count(x => x.ToLower() == "-from") > 0)
+            {
+                int i = Array.FindIndex(parser.Parameters, x => x.ToLower() == "-from");
+                DateTime.TryParse(parser.Parameters[i + 1], out fromDate);
+                if (fromDate == new DateTime())
+                    err = "la date du champ **-from** n'est pas au bon format :\n```!balance -from 15/02/2015```\n\n";
+                else
+                {
+                    from = true;
+                    if (parser.Parameters.Count(x => x.ToLower() == "-to") > 0)
+                    {
+                        int j = Array.FindIndex(parser.Parameters, x => x.ToLower() == "-to");
+                        DateTime.TryParse(parser.Parameters[j + 1], out toDate);
+                        if (toDate == null)
+                            err += "la date du champ **-to** n'est pas au bon format :\n```!balance -from 02/06/2015```\n\n";
+                        else
+                        {
+                            if (fromDate > toDate)
+                                err += "la date de fin **-to** doit se trouver après la date de début **-from** \n\n";
+                            else
+                                limit = 0;
+                        }
+                    }
+                    else
+                    {
+                        toDate = DateTime.Now;
+                        limit = 0;
+                    }
+                }
+            }
+
+            if (!from)
+                if (Helpers.Discord.IsAdmin(u))
+                    limit = 0;
+
+            if (parser.Parameters.Count(x => x.ToLower() == "-avg") > 0)
+                average = true;
+
+            if (parser.Parameters.Count(x => x.ToLower() == "-op") > 0)
+                op = true;
+
+            if (parser.Parameters.Count(x => x.ToLower() == "-weak") > 0)
+                weak = true;
+
+            if (op && weak)
+                err += "Les deux paramètres ne peuvent pas être utilisé en même temps.";
+
+            if (string.IsNullOrEmpty(err))
+            {
+                if ((op || weak) && average)
+                    return Aligulac.ShowPeriodObject(
+                        await Aligulac.Balance(fromDate, toDate, false, op, weak, limit),
+                            (op || weak), op, average);
+
+                return Aligulac.ShowPeriodObject(
+                    await Aligulac.Balance(fromDate, toDate, average, op, weak, limit),
+                        (op || weak), op, average);
+
+            }
+            else
+                return ConvertSingleReturnToList(err);
         }
 
         public static async Task<List<string>> Predict(Parser parser, Discord.Server s = null, Discord.User u = null)

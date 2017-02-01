@@ -61,7 +61,7 @@ namespace SC2Bot.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à lalalalala.
+        ///   Recherche une chaîne localisée semblable à Utilise le site Aligulac (http://aligulac.com/periods/)\nPermet de voir la race dominante et dominée. \n```# Renvoie les 10 derniers résultats\n!balance```\n\n```# Renvoie les résultats depuis une date, si le -to est renseigné, les résultats sont compris entre ces deux dates\n!balance -from 02/06/2013 -to 23/12/2013```\n\n```# Donne un résumé des races OP\n!balance -op\n\n# Donne un résumé des races faibles\n!balance -weak```\n\n```# Condense et fait la moyenne du resultat\n!balance -avg```.
         /// </summary>
         internal static string BalanceCommandHelp {
             get {
@@ -70,7 +70,7 @@ namespace SC2Bot.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Il y a plusieurs commandes disponibles : `!player` `!top` `!predict` `!quote`\nIl suffit d&apos;utiliser le mot clé \&quot;**-help**\&quot; pour plus d&apos;information, example :\n`!predict -help`.
+        ///   Recherche une chaîne localisée semblable à Il y a plusieurs commandes disponibles : `!player` `!top` `!predict` `!quote` `!balance`\nIl suffit d&apos;utiliser le mot clé \&quot;**-help**\&quot; pour plus d&apos;information, example :\n`!predict -help`.
         /// </summary>
         internal static string HelpCommand {
             get {
