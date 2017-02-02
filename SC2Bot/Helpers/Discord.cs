@@ -35,5 +35,10 @@ namespace SC2Bot.Helpers
                 || x.Name == "Jungsu Terran" 
                 || x.Name == "Gosu 💎") > 0;
         }
+
+        public static List<User> NoRoleUsers(Server serv)
+        {
+            return serv.Users.Where(x => x.Roles.Count() == 1 && x.Roles.First().IsEveryone).ToList();
+        }
     }
 }

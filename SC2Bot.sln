@@ -5,9 +5,9 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SC2Bot", "SC2Bot\SC2Bot.csproj", "{EB2EA6CF-99D7-4CB6-A985-FEC2C0995515}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aligulac", "aligulac\Aligulac.csproj", "{A621CA65-5344-4152-8F0F-2D8FD13BE98A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aligulac", "Aligulac\Aligulac.csproj", "{A621CA65-5344-4152-8F0F-2D8FD13BE98A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crawlers", "Liquipedia\Crawlers.csproj", "{33CD67C6-8920-43E5-91A4-90185957DCED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crawlers", "Crawlers\Crawlers.csproj", "{33CD67C6-8920-43E5-91A4-90185957DCED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationNoBot", "ApplicationNoBot\ApplicationNoBot.csproj", "{F8182005-0ADA-4174-B6A6-CBD53949B438}"
 EndProject
