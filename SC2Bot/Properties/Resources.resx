@@ -150,6 +150,9 @@
   <data name="RandomQuote" xml:space="preserve">
     <value>Pour les hommes !</value>
   </data>
+  <data name="RappelRaceStr" xml:space="preserve">
+    <value>Hello !\nTu as rejoint le Discord **SC2 France** mais tu n'as toujours pas renseigné ta race, quelle race joues-tu ?\nécris : **Zerg**, **Terran**, **Protoss** ou **Random**</value>
+  </data>
   <data name="TerranQuote" xml:space="preserve">
     <value>Kaboom Baby !</value>
   </data>

@@ -10,7 +10,7 @@ namespace AligulacSC2
 {
     public class Aligulac
     {
-        static private string _KEY_ = string.Empty;
+        private string _KEY_ = string.Empty;
 
         public Aligulac(string APIKey)
         {
@@ -22,7 +22,7 @@ namespace AligulacSC2
             return await RestClient.Search(searchStr);
         }
 
-        static async public Task<Player> Player(string name)
+        async public Task<Player> Player(string name)
         {
             var playerSR = await RestClient.Search(name);
             var id = playerSR.Players;
@@ -34,7 +34,7 @@ namespace AligulacSC2
             return new Player();
         }
 
-        static async public Task<Prediction> Predict(string plAName, string plBName, string BO = "3")
+        async public Task<Prediction> Predict(string plAName, string plBName, string BO = "3")
         {
             var plASR = await RestClient.Search(plAName);
             var plBSR = await RestClient.Search(plBName);
@@ -49,12 +49,12 @@ namespace AligulacSC2
             return new Prediction() { Error = $"Désolé, je ne peux pas faire de prédiction avec des nonames {Properties.Resources.Kappa_Emoji}" };
         }
 
-        static async public Task<GenericResult<Player>> Top(int nb = 10)
+        async public Task<GenericResult<Player>> Top(int nb = 10)
         {
             return await RestClient.GetTopPlayers(nb.ToString(), _KEY_);
         }
 
-        static async public Task<GenericResult<Period>> Balance(DateTime From, DateTime To, bool avg, bool op, bool wk, int limit = 0)
+        async public Task<GenericResult<Period>> Balance(DateTime From, DateTime To, bool avg, bool op, bool wk, int limit = 0)
         {
             var listP = await RestClient.GetPeriods(_KEY_, limit);
 
@@ -288,13 +288,13 @@ namespace AligulacSC2
 
         //** Balance **//
 
-        static private Period[] FilterFromToPeriod(GenericResult<Period> p, DateTime f, DateTime t)
+        private Period[] FilterFromToPeriod(GenericResult<Period> p, DateTime f, DateTime t)
         {
             var tempList = p.Results.Where(x => x.StartDate >= f && x.EndDate <= t).ToArray();
             return tempList;
         }
 
-        static private Period[] AveragePeriod(GenericResult<Period> pt)
+        private Period[] AveragePeriod(GenericResult<Period> pt)
         {
             Period p = new Period();
             var ps = pt.Results;
@@ -321,13 +321,13 @@ namespace AligulacSC2
             return new Period[] { p };
         }
 
-        static private Period[] OpPeriod(GenericResult<Period> pt)
+        private Period[] OpPeriod(GenericResult<Period> pt)
         {
             var ps = pt.Results;
             return ps.Where(x => x.Leading.isOP).ToArray();
         }
 
-        static private Period[] WeakPeriod(GenericResult<Period> pt)
+        private Period[] WeakPeriod(GenericResult<Period> pt)
         {
             var ps = pt.Results;
             return ps.Where(x => x.Lagging.isWeak).ToArray();
@@ -335,12 +335,11 @@ namespace AligulacSC2
 
         //** Easter Egg **//
 
-        static public async Task<List<string>> CrunchyRules(string name, int BO)
+        public async Task<List<string>> CrunchyRules(string name, int BO)
         {
             var p = await Player(name);
             var nbGames = Math.Ceiling(decimal.Divide(BO, 2));
             return new List<string>() { $"**100%** \t:flag_fr: (Z) **Crunchy** \t **{nbGames}** - 0 \t{PlayerToString(p)} \n" };
         }
-
     }
 }

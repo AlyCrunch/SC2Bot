@@ -1,4 +1,5 @@
 ﻿using AligulacSC2;
+using Discord;
 using QuoteOfTheDay;
 using SC2Bot.Helpers;
 using System;
@@ -10,30 +11,52 @@ namespace SC2Bot
 {
     public static class Commands
     {
+        private static Infos _i = new Infos();
         private static System.Resources.ResourceManager _rm = Properties.Resources.ResourceManager;
 
-        public static async Task<List<string>> SelectCommands(string query, Discord.Server s = null, Discord.User u = null, bool isPM = false)
+        public static async Task<List<string>> SelectCommands(MessageEventArgs e, DiscordClient c)
         {
-            if (IsRaceAssignement(query) && isPM)
-                return await AssignRace(query.ToLower(), s, u);
-
-            if (query[0] != '!') return null;
-
-            var parser = new Parser(query);
-
-            if (parser.Method == null) return null;
-
-            switch (parser.Method.ToLower())
+            try
             {
-                case "quote": return await Quote(parser, s, u);
-                case "top": return await Top(parser, s, u);
-                case "player": return await Player(parser);
-                case "predict": return await Predict(parser);
-                case "balance": return await Balance(parser, s, u);
-                case "help": return Help();
-            }
+                var q = e.Message.Text;
+                var u = e.User;
 
-            return null;
+                if (IsRaceAssignement(e))
+                    return await AssignRace(q.ToLower(), e.Server, e.User);
+
+                if (IsDisconnectedCommand(e, c))
+                {
+                    c.Log.Info("DISCONNECTED", $"Authorized by : {u.Name}");
+                    await c.Disconnect();
+                    return new List<string>();
+                }
+                if (IsAskForRace(e, c))
+                {
+                    var usrs = Helpers.Discord.GetUserNoRole(c.Servers.First(s => s.Name == _i.ServerName));
+                    await SendMessageToAll(Res("RappelRaceStr"), usrs);
+                }
+
+                if (q[0] != '!') return new List<string>();
+
+                var parser = new Parser(q);
+
+                if (parser.Method == null) return new List<string>();
+
+                switch (parser.Method.ToLower())
+                {
+                    case "quote": return await Quote(parser, e.Server, e.User);
+                    case "top": return await Top(parser, e.Server, e.User);
+                    case "player": return await Player(parser, e.Server, e.User);
+                    case "predict": return await Predict(parser, e.Server, e.User);
+                    case "balance": return await Balance(parser, e.Server, e.User);
+                    case "help": return Help();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] {ex.Source}: {ex.Message}\n{ex.InnerException}");
+            }
+            return new List<string>();
         }
 
         public static List<string> Help()
@@ -41,7 +64,7 @@ namespace SC2Bot
             return ConvertSingleReturnToList(Res("HelpCommand"));
         }
 
-        public static async Task<List<string>> Player(Parser parser, Discord.Server s = null, Discord.User u = null)
+        public static async Task<List<string>> Player(Parser parser, Server s = null, User u = null)
         {
             if (parser.Parameters == null)
                 return ConvertSingleReturnToList(Res("PlayerCommandMissing"));
@@ -49,10 +72,10 @@ namespace SC2Bot
             if (parser.Parameters[0] == "-help")
                 return ConvertSingleReturnToList(Res("PlayerCommandHelp"));
 
-            return Aligulac.ShowPlayerObject(await Aligulac.Player(parser.Parameters[0]));
+            return Aligulac.ShowPlayerObject(await _i.Aligulac.Player(parser.Parameters[0]));
         }
 
-        public static async Task<List<string>> Balance(Parser parser, Discord.Server s = null, Discord.User u = null)
+        public static async Task<List<string>> Balance(Parser parser, Server s = null, User u = null)
         {
             var err = string.Empty;
             DateTime fromDate = new DateTime(), toDate = new DateTime();
@@ -116,11 +139,11 @@ namespace SC2Bot
             {
                 if ((op || weak) && average)
                     return Aligulac.ShowPeriodObject(
-                        await Aligulac.Balance(fromDate, toDate, false, op, weak, limit),
+                        await _i.Aligulac.Balance(fromDate, toDate, false, op, weak, limit),
                             (op || weak), op, average);
 
                 return Aligulac.ShowPeriodObject(
-                    await Aligulac.Balance(fromDate, toDate, average, op, weak, limit),
+                    await _i.Aligulac.Balance(fromDate, toDate, average, op, weak, limit),
                         (op || weak), op, average);
 
             }
@@ -128,7 +151,7 @@ namespace SC2Bot
                 return ConvertSingleReturnToList(err);
         }
 
-        public static async Task<List<string>> Predict(Parser parser, Discord.Server s = null, Discord.User u = null)
+        public static async Task<List<string>> Predict(Parser parser, Server s = null, User u = null)
         {
             if (parser.Parameters == null)
                 return ConvertSingleReturnToList(Res("PredictCommandMissing"));
@@ -149,9 +172,9 @@ namespace SC2Bot
                         int.TryParse(parser.Parameters[2], out BOnb);
 
                     if (parser.Parameters[0].ToLower() == "crunchy")
-                        return await Aligulac.CrunchyRules(parser.Parameters[1], BOnb);
+                        return await _i.Aligulac.CrunchyRules(parser.Parameters[1], BOnb);
                     else
-                        return await Aligulac.CrunchyRules(parser.Parameters[0], BOnb);
+                        return await _i.Aligulac.CrunchyRules(parser.Parameters[0], BOnb);
                 }
             }
             #endregion
@@ -161,7 +184,7 @@ namespace SC2Bot
             if (parser.Parameters.Length == 3)
                 int.TryParse(parser.Parameters[2], out nbBO);
 
-            var retPred = await Aligulac.Predict(parser.Parameters[0], parser.Parameters[1], nbBO.ToString());
+            var retPred = await _i.Aligulac.Predict(parser.Parameters[0], parser.Parameters[1], nbBO.ToString());
 
             if (string.IsNullOrEmpty(retPred.Error))
                 return Aligulac.ShowPredictionObject(retPred);
@@ -169,7 +192,7 @@ namespace SC2Bot
                 return ConvertSingleReturnToList(retPred.Error);
         }
 
-        public static async Task<List<string>> Top(Parser parser, Discord.Server s = null, Discord.User u = null)
+        public static async Task<List<string>> Top(Parser parser, Server s = null, User u = null)
         {
             if (parser.Parameters != null
                 && parser.Parameters.Length == 1
@@ -179,10 +202,10 @@ namespace SC2Bot
             int topNb = 10;
             if (parser.Parameters != null && Helpers.Discord.IsAdmin(u))
                 int.TryParse(parser.Parameters[0], out topNb);
-            return Aligulac.ShowTopObject(await Aligulac.Top(topNb));
+            return Aligulac.ShowTopObject(await _i.Aligulac.Top(topNb));
         }
 
-        public static async Task<List<string>> Quote(Parser parser, Discord.Server s = null, Discord.User u = null)
+        public static async Task<List<string>> Quote(Parser parser, Server s = null, User u = null)
         {
             var allQuotes = new SC2Quotes();
             var quote = new QuoteOfTheDay.Datas.Quote();
@@ -225,7 +248,7 @@ namespace SC2Bot
             return ConvertSingleReturnToList(allQuotes.FormatQuote(quote));
         }
 
-        public static async Task<List<string>> AssignRace(string race, Discord.Server s = null, Discord.User u = null)
+        public static async Task<List<string>> AssignRace(string race, Server s = null, User u = null)
         {
             var zRole = s.FindRoles("Zerg", true).First();
             var tRole = s.FindRoles("Terran", true).First();
@@ -251,13 +274,54 @@ namespace SC2Bot
             return null;
         }
 
-        private static bool IsRaceAssignement(string q)
+        private static async Task SendMessageToAll(string Message, List<User> Us)
         {
-            if (q == "zerg" ||
+            foreach (var u in Us)
+                await u.SendMessage(Message);
+        }
+
+        private static bool IsAskForRace(MessageEventArgs e, DiscordClient c)
+        {
+            if (!e.Channel.IsPrivate) return false;
+            if (e.Message.Text.ToLower() != "race") return false;
+            if (Helpers.Discord.IsAdminServer(c.Servers.ToList(), _i.ServerName, e.User))
+                return true;
+
+            return false;
+        }
+
+        private static bool IsRaceAssignement(MessageEventArgs e)
+        {
+            var q = e.Message.Text;
+            var pm = e.Channel.IsPrivate;
+
+            if (pm &&
+                (q == "zerg" ||
                 q == "protoss" ||
                 q == "terran" ||
-                q == "random")
+                q == "random"))
                 return true;
+            return false;
+        }
+
+        private static bool IsDisconnectedCommand(MessageEventArgs e, DiscordClient c)
+        {
+            if (e.Message.Text.ToLower() == "stop")
+            {
+                if (Helpers.Discord.IsAdminGetFirstServer(e.User, c))
+                    return true;
+                return false;
+            }
+            else
+            {
+                var qS = e.Message.Text.Split(':');
+                if (qS.Count() != 2) return false;
+                if (qS[0] != "stop") return false;
+                if (!e.Channel.IsPrivate) return false;
+
+                if (Helpers.Discord.IsAdminServer(c.Servers.ToList(), qS[1], e.User))
+                    return true;
+            }
             return false;
         }
 

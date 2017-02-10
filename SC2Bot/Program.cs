@@ -1,46 +1,47 @@
 ﻿using System;
-using AligulacSC2;
 using Discord;
 using System.Threading.Tasks;
+using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace SC2Bot
 {
     class Program
     {
-        private static string _tokenBot;
-        private static ulong _SuperUserId = 0;
-        private static DiscordClient _client;
-        private static Aligulac _aligu;
-
         static void Main(string[] args)
         {
-            Init();
-
-            _client = new DiscordClient(x =>
+            var _client = new DiscordClient(x =>
             {
                 x.LogLevel = LogSeverity.Info;
             });
+            var _info = new Helpers.Infos();
 
             _client.Log.Message += (s, e) => Console.WriteLine($"[{e.Severity}] {e.Source}: {e.Message}");
 
-            _client.MessageReceived += async (s, e) =>
-            {
-                try
-                {
-                    var server = e.Server;
-                    var msg = e.Message;
-                    var usr = msg.User;
+            var messages = Observable.FromEventPattern<MessageEventArgs>(
+                h => _client.MessageReceived += h,
+                h => _client.MessageReceived -= h);
 
-                    if (msg.Text == "" || msg.IsAuthor) return;
+            var validMessages = messages.Where(e => IsValidMessage(e.EventArgs));
+            
+            var commandTasks = validMessages.Select(
+                    (s) =>
+                    {
+                        var tMsg = Task.Run(() => Commands.SelectCommands(s.EventArgs, _client));
+                        return new Tuple<MessageEventArgs, List<string>>(s.EventArgs, tMsg.Result);
+                    }
+            );
 
-                    if (msg.Text.ToLower() == "stop") await DisconnectClient(usr);
-                    else await SendMessage(msg.Text, server, usr, e.Channel);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"[ERROR] {ex.Source}: {ex.Message}");
-                }
-            };
+            var sendingTasks = commandTasks.Select(
+                    (s) =>
+                    {
+                        return Task.Run(() => SendMessage(s.Item1, s.Item2)).ToObservable();
+                    }
+            );
+
+            var tasks = sendingTasks;
+            var tasksSub = tasks.Subscribe();
 
             _client.UserJoined += async (s, e) =>
             {
@@ -49,34 +50,27 @@ namespace SC2Bot
 
             _client.ExecuteAndWait(async () =>
             {
-                await _client.Connect(_tokenBot, TokenType.Bot);
+                await _client.Connect(_info.BotAPI, TokenType.Bot);
             });
         }
 
-        static void Init()
+        static private IObservable<bool> ErrorHandler(Exception ex)
         {
-            _tokenBot = Environment.GetEnvironmentVariable("APIBotSC2");
-            _aligu = new Aligulac(Environment.GetEnvironmentVariable("APIBotAligulacSC2"));
-            ulong.TryParse(Environment.GetEnvironmentVariable("SuperUserIdDiscord"), out _SuperUserId);
+            Console.WriteLine($"[Error Handler] {ex.Source}: {ex.Message}");
+            return Observable.Return(false);
         }
+        
+        static private bool IsValidMessage(MessageEventArgs e) => !string.IsNullOrEmpty(e.Message.Text) && !e.Message.IsAuthor;
 
-        static async Task SendMessage(string msg, Server s, User u, Channel c)
+        static async Task<bool> SendMessage(MessageEventArgs e, List<string> messages)
         {
-            var messages = await Commands.SelectCommands(msg, s, u, c.IsPrivate);
-            if (messages != null)
+            if (messages != null || messages.Count > 0)
             {
                 foreach (var message in messages)
-                    await c.SendMessage(message);
+                    await e.Channel.SendMessage(message);
+                return true;
             }
-        }
-
-        static async Task DisconnectClient(User usr)
-        {
-            if (Helpers.Discord.IsAdmin(usr, true, _SuperUserId))
-            {
-                _client.Log.Info("DISCONNECTED", $"Authorized by : {usr.Name}");
-                await _client.Disconnect();
-            }
+            return false;
         }
     }
 }

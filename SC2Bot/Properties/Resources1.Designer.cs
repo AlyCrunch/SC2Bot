@@ -160,6 +160,15 @@ namespace SC2Bot.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Hello !\nTu as rejoint le Discord **SC2 France** mais tu n&apos;as toujours pas renseigné ta race, quelle race joues-tu ?\nécris : **Zerg**, **Terran**, **Protoss** ou **Random**.
+        /// </summary>
+        internal static string RappelRaceStr {
+            get {
+                return ResourceManager.GetString("RappelRaceStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Kaboom Baby !.
         /// </summary>
         internal static string TerranQuote {
