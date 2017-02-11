@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -54,5 +55,20 @@ namespace SC2Bot.Helpers
         {
             return serv.Users.Where(x => x.Roles.Count() == 1 && x.Roles.First().IsEveryone).ToList();
         }
+        
+    }
+
+    public class Connection
+    {
+        [JsonProperty(PropertyName = "id")]
+        public string ID { get; set; }
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+        [JsonProperty(PropertyName = "revoked")]
+        public bool isRevoked { get; set; }
+        [JsonProperty(PropertyName = "integrations")]
+        public object[] Integrations { get; set; }
     }
 }

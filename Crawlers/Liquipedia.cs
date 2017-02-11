@@ -1,18 +1,16 @@
-﻿using System;
+﻿using Crawlers.Objects;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Liquipedia
+namespace Crawlers
 {
     public class Liquipedia
     {
-        public void test()
+        public async Task<List<Transfert>> GetTransfert()
         {
             string url = "http://wiki.teamliquid.net/starcraft2/Main_Page";
-            var parser = new Crawlers.Utils.Parser();
-            parser.GetDocument(url);
+            var parser = new Utils.Parser();
+            return await parser.ParsingTransfers(url);            
         }
     }
 }

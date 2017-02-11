@@ -54,9 +54,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\QuoteOfTheDay\QuoteOfTheDay.csproj">
-      <Project>{ae81c929-6a83-4667-aa57-71d9f6b149e4}</Project>
-      <Name>QuoteOfTheDay</Name>
+    <ProjectReference Include="..\Crawlers\Crawlers.csproj">
+      <Project>{33cd67c6-8920-43e5-91a4-90185957dced}</Project>
+      <Name>Crawlers</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
