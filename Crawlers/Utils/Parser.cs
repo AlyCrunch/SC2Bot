@@ -88,7 +88,7 @@ namespace Crawlers.Utils
                 }
                 else
                 {
-                    return new Team() { Name = "Aucune", ImageURL = string.Empty };
+                    return new Team() { Name = TeamNode.Descendants("i").First().InnerText, ImageURL = string.Empty };
                 }
             }
 
