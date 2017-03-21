@@ -10,7 +10,8 @@ namespace Crawlers
         {
             string url = "http://wiki.teamliquid.net/starcraft2/Main_Page";
             var parser = new Utils.Parser();
-            return await parser.ParsingTransfers(url);            
+
+            return parser.ParsingTransfers(await parser.GetDocumentHTML(url));            
         }
     }
 }

@@ -13,18 +13,21 @@ namespace Crawlers.Utils
 {
     public class Parser
     {
-        public async Task<List<Transfert>> ParsingTransfers(string url)
+        public async Task<HtmlDocument> GetDocumentHTML(string URL)
         {
-            var http = new HttpClient();
-            var response = await http.GetByteArrayAsync(url);
+            var response = await new HttpClient().GetByteArrayAsync(URL);
 
             String source = Encoding.GetEncoding("utf-8").GetString(response, 0, response.Length - 1);
             source = WebUtility.HtmlDecode(source);
             HtmlDocument resultat = new HtmlDocument();
             resultat.LoadHtml(source);
 
+            return resultat;
+        }
 
-            HtmlNode transfertNode = resultat.DocumentNode.Descendants().
+        public List<Transfert> ParsingTransfers(HtmlDocument page)
+        {
+            HtmlNode transfertNode = page.DocumentNode.Descendants().
                 First(x => (x.Name == "div"
                             && x.Attributes["class"] != null
                             && x.Attributes["class"].Value.Equals("divTable mainpage-transfer Ref")));
