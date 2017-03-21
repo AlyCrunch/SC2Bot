@@ -46,7 +46,7 @@ namespace SC2Bot
                 {
                     case "quote": return await Quote(parser, e.Server, e.User);
                     case "top": return await Top(parser, e.Server, e.User);
-                    case "player": return await Player(parser, e.Server, e.User);
+                    //case "player": return await Player(parser, e.Server, e.User);
                     case "predict": return await Predict(parser, e.Server, e.User);
                     case "balance": return await Balance(parser, e.Server, e.User);
                     case "help": return Help();
