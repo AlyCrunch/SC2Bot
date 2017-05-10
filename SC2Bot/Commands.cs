@@ -1,4 +1,5 @@
 ﻿using AligulacSC2;
+using Crawlers;
 using Discord;
 using QuoteOfTheDay;
 using SC2Bot.Helpers;
@@ -49,6 +50,7 @@ namespace SC2Bot
                     //case "player": return await Player(parser, e.Server, e.User);
                     case "predict": return await Predict(parser, e.Server, e.User);
                     case "balance": return await Balance(parser, e.Server, e.User);
+                    case "transfers": return await Transfers();
                     case "help": return Help();
                 }
             }
@@ -274,12 +276,26 @@ namespace SC2Bot
             return null;
         }
 
+        public static async Task<List<string>> Transfers()
+        {
+            var TL = await new Liquipedia().GetTransfert();
+            string alltransfers = string.Empty;
+
+            foreach (var transfer in TL)
+            {
+                alltransfers += $"{transfer.Date.ToShortDateString()} : **{string.Join(", ", transfer.Players.Select(x => x.Name))}** \t{transfer.OldTeam.Name} \t⇒ \t{transfer.NewTeam.Name}" + "\n";
+            }
+
+            return ConvertSingleReturnToList(alltransfers);
+        }
+
         private static async Task SendMessageToAll(string Message, List<User> Us)
         {
             foreach (var u in Us)
                 await u.SendMessage(Message);
         }
 
+        #region Filters
         private static bool IsAskForRace(MessageEventArgs e, DiscordClient c)
         {
             if (!e.Channel.IsPrivate) return false;
@@ -324,6 +340,7 @@ namespace SC2Bot
             }
             return false;
         }
+        #endregion
 
         private static List<string> ConvertSingleReturnToList(string msg)
         {
