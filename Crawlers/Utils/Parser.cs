@@ -27,31 +27,21 @@ namespace Crawlers.Utils
 
         public List<Transfert> ParsingTransfers(HtmlDocument page)
         {
-            HtmlNode transfertNode = page.DocumentNode.Descendants().
-                First(x => (x.Name == "div"
-                            && x.Attributes["class"] != null
-                            && x.Attributes["class"].Value.Equals("divTable mainpage-transfer Ref")));
+            var transferNode = page.DocumentNode.Descendants().First(x => IsTransfertTable(x))
+                                                .Descendants().Where(x => IsTransfertLine(x));
 
-            var cleanTN = transfertNode.Descendants().Where(x => (x.Name == "div"
-                            && x.Attributes["class"] != null
-                            && x.Attributes["class"].Value.Contains("divRow")));
+            List<Transfert> listTransfert = new List<Transfert>();
 
-            var listTransfert = new List<Transfert>();
-
-            foreach (var child in cleanTN)
+            foreach (var child in transferNode)
             {
                 var t = new Transfert();
                 var pl = new List<Player>();
                 var d = new DateTime();
                 t.Players = new List<Player>();
 
-                var dateNode = child.Descendants().First(x => x.Attributes["class"] != null
-                                                              && x.Attributes["class"].Value.Equals("divCell Date"));
-                var playersNode = child.Descendants().First(x => x.Attributes["class"] != null
-                                                              && x.Attributes["class"].Value.Equals("divCell Name"));
-                var teamsNode = child.Descendants().Where(x => x.Attributes["class"] != null
-                                                              && x.Attributes["class"].Value.Equals("divCell Team")).ToArray();
-
+                var dateNode = child.Descendants().First(x => IsDate(x));
+                var playersNode = child.Descendants().First(x => IsPlayer(x));
+                var teamsNode = child.Descendants().Where(x => IsTeam(x)).ToArray();
 
                 var playerNodes = Split(playersNode.Descendants("a").ToList());
 
@@ -67,9 +57,7 @@ namespace Crawlers.Utils
                 t.OldTeam = GetTeam(teamsNode[0]);
                 t.NewTeam = GetTeam(teamsNode[1]);
 
-
                 listTransfert.Add(t);
-
             }
 
             List<List<HtmlNode>> Split<HtmlNode>(List<HtmlNode> plF)
@@ -85,7 +73,7 @@ namespace Crawlers.Utils
             {
                 if (TeamNode.Descendants().Any(x => x.Name == "img"))
                 {
-                    var name = TeamNode.Descendants("img").First().GetAttributeValue("alt", "Aucune");
+                    var name = TeamNode.Descendants("a").First().GetAttributeValue("title", string.Empty);
                     string urlT = TeamNode.Descendants("img").First().GetAttributeValue("src", string.Empty);
                     return new Team() { Name = name, ImageURL = urlT };
                 }
@@ -97,15 +85,39 @@ namespace Crawlers.Utils
 
             Player GetPlayer(List<HtmlNode> Player)
             {
-                return new Player()
-                {
-                    Country = Player[0].GetAttributeValue("title", string.Empty),
-                    Name = Player[2].GetAttributeValue("title", string.Empty),
-                    RaceLong = Player[1].GetAttributeValue("title", string.Empty)
-            };
+                if (Player.Count == 3)
+                    return new Player()
+                    {
+                        Country = Player[0].GetAttributeValue("title", string.Empty),
+                        Name = Player[2].GetAttributeValue("title", string.Empty),
+                        RaceLong = Player[1].GetAttributeValue("title", string.Empty)
+                    };
+                if (Player.Count == 1)
+                    return new Player()
+                    {
+                        Name = Player[0].InnerText,
+                        Country = string.Empty,
+                        RaceLong = string.Empty
+                    };
+                return new Player();
             }
 
             return listTransfert;
         }
+
+        public List<Event> ParsingEvents(HtmlDocument page, Period p, bool All = false)
+        {
+            List<Event> listEvent = new List<Event>();
+
+            return listEvent;
+        }
+
+        #region Filters
+        private bool IsTransfertLine(HtmlNode t) => (t.Name == "div" && t.Attributes["class"] != null && t.Attributes["class"].Value.Contains("divRow"));
+        private bool IsTransfertTable(HtmlNode t) => (t.Name == "div" && t.Attributes["class"] != null && t.Attributes["class"].Value.Contains("divTable mainpage-transfer Ref"));
+        private bool IsDate(HtmlNode t) => (t.Attributes["class"] != null && t.Attributes["class"].Value.Equals("divCell Date"));
+        private bool IsPlayer(HtmlNode t) => (t.Attributes["class"] != null && t.Attributes["class"].Value.Equals("divCell Name"));
+        private bool IsTeam(HtmlNode t) => (t.Attributes["class"] != null && t.Attributes["class"].Value.Equals("divCell Team"));
+        #endregion
     }
 }
