@@ -50,7 +50,7 @@ namespace SC2Bot
                     //case "player": return await Player(parser, e.Server, e.User);
                     case "predict": return await Predict(parser, e.Server, e.User);
                     case "balance": return await Balance(parser, e.Server, e.User);
-                    case "transfers": return await Transfers();
+                    case "transfer": return await Transfers(parser, e.Server, e.User);
                     case "help": return Help();
                 }
             }
@@ -276,8 +276,11 @@ namespace SC2Bot
             return null;
         }
 
-        public static async Task<List<string>> Transfers()
+        public static async Task<List<string>> Transfers(Parser parser, Server s = null, User u = null)
         {
+            if (parser.Parameters != null && parser.Parameters[0] == "-help")
+                return ConvertSingleReturnToList(Res("TransfersHelp"));
+
             var TL = await new Liquipedia().GetTransfert();
             string alltransfers = string.Empty;
 

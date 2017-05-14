@@ -70,7 +70,7 @@ namespace SC2Bot.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Il y a plusieurs commandes disponibles : `!player` `!top` `!predict` `!quote` `!balance`\nIl suffit d&apos;utiliser le mot clé \&quot;**-help**\&quot; pour plus d&apos;information, example :\n`!predict -help`.
+        ///   Recherche une chaîne localisée semblable à Il y a plusieurs commandes disponibles : `!top` `!predict` `!quote` `!balance` `!transfer`\nIl suffit d&apos;utiliser le mot clé \&quot;**-help**\&quot; pour plus d&apos;information, example :\n`!predict -help`.
         /// </summary>
         internal static string HelpCommand {
             get {
@@ -183,6 +183,15 @@ namespace SC2Bot.Properties {
         internal static string TopCommandHelp {
             get {
                 return ResourceManager.GetString("TopCommandHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Retourne la liste des joueurs transférés recemment. Les données sont extraites à partir du wiki TeamLiquid..
+        /// </summary>
+        internal static string TransfersHelp {
+            get {
+                return ResourceManager.GetString("TransfersHelp", resourceCulture);
             }
         }
         
