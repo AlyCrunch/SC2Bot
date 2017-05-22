@@ -70,7 +70,7 @@ namespace SC2Bot.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Il y a plusieurs commandes disponibles : `!top` `!predict` `!quote` `!balance` `!transfer`\nIl suffit d&apos;utiliser le mot clé \&quot;**-help**\&quot; pour plus d&apos;information, example :\n`!predict -help`.
+        ///   Recherche une chaîne localisée semblable à Il y a plusieurs commandes disponibles : `!top` `!predict` `!quote` `!balance` `!transfer`\nIl suffit d&apos;utiliser le mot clé \&quot;**-help**\&quot; pour plus d&apos;information, exemple :\n`!predict -help`.
         /// </summary>
         internal static string HelpCommand {
             get {

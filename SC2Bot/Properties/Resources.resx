@@ -121,7 +121,7 @@
     <value>Utilise le site Aligulac (http://aligulac.com/periods/)\nPermet de voir la race dominante et dominée. \n```# Renvoie les 10 derniers résultats\n!balance```\n\n```# Renvoie les résultats depuis une date, si le -to est renseigné, les résultats sont compris entre ces deux dates\n!balance -from 02/06/2013 -to 23/12/2013```\n\n```# Donne un résumé des races OP\n!balance -op\n\n# Donne un résumé des races faibles\n!balance -weak```\n\n```# Condense et fait la moyenne du resultat\n!balance -avg```</value>
   </data>
   <data name="HelpCommand" xml:space="preserve">
-    <value>Il y a plusieurs commandes disponibles : `!top` `!predict` `!quote` `!balance` `!transfer`\nIl suffit d'utiliser le mot clé \"**-help**\" pour plus d'information, example :\n`!predict -help`</value>
+    <value>Il y a plusieurs commandes disponibles : `!top` `!predict` `!quote` `!balance` `!transfer`\nIl suffit d'utiliser le mot clé \"**-help**\" pour plus d'information, exemple :\n`!predict -help`</value>
   </data>
   <data name="PlayerCommandHelp" xml:space="preserve">
     <value>Recherche un joueur sur Aligulac, si les informations sont disponibles, la team ainsi que la page liquipedia est retournée.\nLa syntaxe à utiliser est : \n ```!player pseudo```</value>
