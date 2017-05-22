@@ -81,7 +81,6 @@ namespace SC2Bot
         {
             var err = string.Empty;
             DateTime fromDate = new DateTime(), toDate = new DateTime();
-            var from = false;
             var average = false;
             var op = false;
             var weak = false;
@@ -90,7 +89,7 @@ namespace SC2Bot
             if (parser.Parameters != null && parser.Parameters.Length > 0 && parser.Parameters[0] == "-help")
                 return ConvertSingleReturnToList(Res("BalanceCommandHelp"));
 
-            if (parser.Parameters.Count(x => x.ToLower() == "-from") > 0)
+            if (parser.Parameters != null && parser.Parameters.Count(x => x.ToLower() == "-from") > 0)
             {
                 int i = Array.FindIndex(parser.Parameters, x => x.ToLower() == "-from");
                 DateTime.TryParse(parser.Parameters[i + 1], out fromDate);
@@ -98,7 +97,6 @@ namespace SC2Bot
                     err = "la date du champ **-from** n'est pas au bon format :\n```!balance -from 15/02/2015```\n\n";
                 else
                 {
-                    from = true;
                     if (parser.Parameters.Count(x => x.ToLower() == "-to") > 0)
                     {
                         int j = Array.FindIndex(parser.Parameters, x => x.ToLower() == "-to");
@@ -121,33 +119,26 @@ namespace SC2Bot
                 }
             }
 
-            if (!from)
-                if (Helpers.Discord.IsAdmin(u))
-                    limit = 0;
-
-            if (parser.Parameters.Count(x => x.ToLower() == "-avg") > 0)
+            if (parser.Parameters != null && parser.Parameters.Count(x => x.ToLower() == "-avg") > 0)
                 average = true;
 
-            if (parser.Parameters.Count(x => x.ToLower() == "-op") > 0)
+            if (parser.Parameters != null && parser.Parameters.Count(x => x.ToLower() == "-op") > 0)
                 op = true;
 
-            if (parser.Parameters.Count(x => x.ToLower() == "-weak") > 0)
+            if (parser.Parameters != null && parser.Parameters.Count(x => x.ToLower() == "-weak") > 0)
                 weak = true;
 
             if (op && weak)
                 err += "Les deux paramètres ne peuvent pas être utilisé en même temps.";
 
+            if (average)
+                limit = 0;
+
             if (string.IsNullOrEmpty(err))
             {
-                if ((op || weak) && average)
-                    return Aligulac.ShowPeriodObject(
-                        await _i.Aligulac.Balance(fromDate, toDate, false, op, weak, limit),
-                            (op || weak), op, average);
-
                 return Aligulac.ShowPeriodObject(
                     await _i.Aligulac.Balance(fromDate, toDate, average, op, weak, limit),
                         (op || weak), op, average);
-
             }
             else
                 return ConvertSingleReturnToList(err);

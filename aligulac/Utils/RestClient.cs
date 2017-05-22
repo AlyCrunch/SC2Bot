@@ -153,7 +153,7 @@ namespace RestConnect
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
             dic.Add("apikey", key);
-            dic.Add("order_by", "end");
+            dic.Add("order_by", "-end");
             dic.Add("limit", limit.ToString());
             string parameters = BuildParameters(dic);
 
