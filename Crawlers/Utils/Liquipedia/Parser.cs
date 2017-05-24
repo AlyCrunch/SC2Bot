@@ -1,4 +1,4 @@
-﻿using Crawlers.Objects;
+﻿using Crawlers.Objects.Liquipedia;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crawlers.Utils
+namespace Crawlers.Utils.Liquipedia
 {
     public class Parser
     {

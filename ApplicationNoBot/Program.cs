@@ -27,7 +27,7 @@ namespace ApplicationNoBot
                     Console.WriteLine($"{e.Date.ToShortDateString()} - {e.Title}");
                 }
                 */
-                List<Crawlers.Objects.Transfert> lt = await l.GetTransfert();
+                List<Crawlers.Objects.Liquipedia.Transfert> lt = await l.GetTransfert();
 
                 Console.WriteLine("\n---- Transferts ----");
                 foreach (var t in lt)

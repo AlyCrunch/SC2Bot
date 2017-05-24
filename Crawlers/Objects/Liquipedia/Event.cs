@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Crawlers.Objects
+namespace Crawlers.Objects.Liquipedia
 {
     public class Event
     {

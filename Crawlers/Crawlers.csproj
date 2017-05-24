@@ -33,7 +33,6 @@
   <ItemGroup>
     <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,11 +45,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Liquipedia.cs" />
-    <Compile Include="Objects\Event.cs" />
-    <Compile Include="Objects\Period.cs" />
-    <Compile Include="Objects\Transfert.cs" />
+    <Compile Include="Objects\Liquipedia\Event.cs" />
+    <Compile Include="Objects\Liquipedia\Period.cs" />
+    <Compile Include="Objects\Liquipedia\Transfert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\Parser.cs" />
+    <Compile Include="SpawningTools.cs" />
+    <Compile Include="Utils\Liquipedia\Parser.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Objects\SpawningTools\" />
+    <Folder Include="Utils\SpawningTools\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

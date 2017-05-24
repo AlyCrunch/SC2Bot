@@ -1,4 +1,4 @@
-﻿using Crawlers.Objects;
+﻿using Crawlers.Objects.Liquipedia;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,7 +13,7 @@ namespace Crawlers
         public async Task<List<Transfert>> GetTransfert()
         {
             string url = "http://wiki.teamliquid.net/starcraft2/Main_Page";
-            var parser = new Utils.Parser();
+            var parser = new Utils.Liquipedia.Parser();
 
             return parser.ParsingTransfers(await parser.GetDocumentHTML(url));
         }
@@ -28,7 +28,7 @@ namespace Crawlers
 
             string url = $"http://www.teamliquid.net/calendar/?view={ period }&year={ dt.Year }&month={ dt.Month }&day={ dt.Day }&game=1";
 
-            var parser = new Utils.Parser();
+            var parser = new Utils.Liquipedia.Parser();
 
             return parser.ParsingEvents(await parser.GetDocumentHTML(url),p);
         }

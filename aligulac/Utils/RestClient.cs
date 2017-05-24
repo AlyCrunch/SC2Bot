@@ -50,8 +50,10 @@ namespace RestConnect
 
         static public async Task<Player> GetPlayerByID(string id, string key)
         {
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic.Add("apikey", key);
+            Dictionary<string, string> dic = new Dictionary<string, string>
+            {
+                { "apikey", key }
+            };
             string parameters = BuildParameters(dic);
 
             Player playerObj = null;
@@ -74,12 +76,14 @@ namespace RestConnect
 
         static public async Task<GenericResult<Player>> GetTopPlayers(string limit, string key)
         {
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic.Add("current_rating__isnull", "false");
-            dic.Add("current_rating__decay__lt", "4");
-            dic.Add("order_by", "-current_rating__rating");
-            dic.Add("limit", limit);
-            dic.Add("apikey", key);
+            Dictionary<string, string> dic = new Dictionary<string, string>
+            {
+                { "current_rating__isnull", "false" },
+                { "current_rating__decay__lt", "4" },
+                { "order_by", "-current_rating__rating" },
+                { "limit", limit },
+                { "apikey", key }
+            };
             string parameters = BuildParameters(dic);
 
             GenericResult<Player> playersObj = null;
@@ -102,8 +106,10 @@ namespace RestConnect
 
         static public async Task<Team> GetTeamByID(string id, string key)
         {
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic.Add("apikey", key);
+            Dictionary<string, string> dic = new Dictionary<string, string>
+            {
+                { "apikey", key }
+            };
             string parameters = BuildParameters(dic);
 
             Team teamObj = null;
@@ -126,9 +132,11 @@ namespace RestConnect
 
         static public async Task<Prediction> GetPrediction(string idPlayerA, string idPlayerB, string BO, string key)
         {
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic.Add("apikey", key);
-            dic.Add("bo", BO);
+            Dictionary<string, string> dic = new Dictionary<string, string>
+            {
+                { "apikey", key },
+                { "bo", BO }
+            };
             string parameters = BuildParameters(dic);
 
             Prediction predObj = null;
@@ -151,10 +159,12 @@ namespace RestConnect
 
         static public async Task<GenericResult<Period>> GetPeriods(string key, int limit = 0)
         {
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic.Add("apikey", key);
-            dic.Add("order_by", "-end");
-            dic.Add("limit", limit.ToString());
+            Dictionary<string, string> dic = new Dictionary<string, string>
+            {
+                { "apikey", key },
+                { "order_by", "-end" },
+                { "limit", limit.ToString() }
+            };
             string parameters = BuildParameters(dic);
 
             GenericResult<Period> periodObj = null;
