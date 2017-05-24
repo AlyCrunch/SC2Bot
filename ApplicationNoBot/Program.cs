@@ -16,24 +16,8 @@ namespace ApplicationNoBot
         {
             try
             {
-                var l = new Liquipedia();
-
-                /*
-                List<Crawlers.Objects.Event> le = await l.GetEvents(DateTime.Now, Crawlers.Objects.Period.Day);
-
-                Console.WriteLine("------ Events ------");
-                foreach (var e in le)
-                {
-                    Console.WriteLine($"{e.Date.ToShortDateString()} - {e.Title}");
-                }
-                */
-                List<Crawlers.Objects.Liquipedia.Transfert> lt = await l.GetTransfert();
-
-                Console.WriteLine("\n---- Transferts ----");
-                foreach (var t in lt)
-                {
-                    Console.WriteLine($"{t.Date.ToShortDateString()} {t.Players[0].Name} {t.OldTeam.Name} => {t.NewTeam.Name}");
-                }
+                //await Liquipedia();
+                await SpawningTools();
             }
             catch (Exception ex)
             {
@@ -42,5 +26,20 @@ namespace ApplicationNoBot
             Console.ReadLine();
         }
 
+        static async Task Liquipedia()
+        {
+            var lt = await new Liquipedia().GetTransfert();
+
+            Console.WriteLine("\n---- Transferts ----");
+            foreach (var t in lt)
+            {
+                Console.WriteLine($"{t.Date.ToShortDateString()} {t.Players[0].Name} {t.OldTeam.Name} => {t.NewTeam.Name}");
+            }
+        }
+
+        static async Task SpawningTools()
+        {
+            await new SpawningTools().GetListBO();
+        }
     }
 }
