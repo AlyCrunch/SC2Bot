@@ -58,7 +58,6 @@
     <Compile Include="Utils\Liquipedia\Parser.cs" />
     <Compile Include="Utils\SpawningTools\Enums.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
