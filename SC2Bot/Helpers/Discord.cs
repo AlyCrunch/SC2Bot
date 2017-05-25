@@ -67,7 +67,7 @@ namespace SC2Bot.Helpers
         [JsonProperty(PropertyName = "type")]
         public string Type { get; set; }
         [JsonProperty(PropertyName = "revoked")]
-        public bool isRevoked { get; set; }
+        public bool IsRevoked { get; set; }
         [JsonProperty(PropertyName = "integrations")]
         public object[] Integrations { get; set; }
     }

@@ -39,7 +39,7 @@ namespace ApplicationNoBot
 
         static async Task SpawningTools()
         {
-            await new SpawningTools().GetListBO();
+            await new SpawningTools().GetListBO("zvt/", "2", "", "r");
         }
     }
 }
