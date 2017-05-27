@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationNoBot", "Applica
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuoteOfTheDay", "QuoteOfTheDay\QuoteOfTheDay.csproj", "{AE81C929-6A83-4667-AA57-71D9F6B149E4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SC2Bot.WebSocket", "SC2Bot.WebSocket\SC2Bot.WebSocket.csproj", "{C0BECBA6-99C9-4439-A01F-B12E5BFB7F46}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{AE81C929-6A83-4667-AA57-71D9F6B149E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE81C929-6A83-4667-AA57-71D9F6B149E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE81C929-6A83-4667-AA57-71D9F6B149E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0BECBA6-99C9-4439-A01F-B12E5BFB7F46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0BECBA6-99C9-4439-A01F-B12E5BFB7F46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0BECBA6-99C9-4439-A01F-B12E5BFB7F46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0BECBA6-99C9-4439-A01F-B12E5BFB7F46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
