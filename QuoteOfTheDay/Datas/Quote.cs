@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace QuoteOfTheDay.Datas
 {
     public class Quote
     {
-        [System.Xml.Serialization.XmlElement("Date")]
+        [XmlElement("Date")]
         public int NbDaysDate { get; set; }
         public DateTime Date
         {
             get
             {
-                DateTime Date = new DateTime(1900,1,1);
+                DateTime Date = new DateTime(1900, 1, 1);
                 Date = Date.AddDays(NbDaysDate);
                 return Date;
             }
@@ -22,5 +19,7 @@ namespace QuoteOfTheDay.Datas
         public string Author { get; set; }
         public string Reference { get; set; }
         public string Text { get; set; }
+        public string Image { get; set; }
+
     }
 }

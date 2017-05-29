@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BalanceCommandHelp" xml:space="preserve">
+    <value>Utilise le site Aligulac (http://aligulac.com/periods/)\nPermet de voir la race dominante et dominée. \n```# Renvoie les 10 derniers résultats\n!balance```\n\n```# Renvoie les résultats depuis une date, si le -to est renseigné, les résultats sont compris entre ces deux dates\n!balance -from 02/06/2013 -to 23/12/2013```\n\n```# Donne un résumé des races OP\n!balance -op\n\n# Donne un résumé des races faibles\n!balance -weak```\n\n```# Condense et fait la moyenne du resultat\n!balance -avg```</value>
+  </data>
+  <data name="HelpCommand" xml:space="preserve">
+    <value>Il y a plusieurs commandes disponibles : `!top` `!predict` `!quote` `!balance` `!transfer`\nIl suffit d'utiliser le mot clé \"**-help**\" pour plus d'information, exemple :\n`!predict -help`</value>
+  </data>
+  <data name="PlayerCommandHelp" xml:space="preserve">
+    <value>Recherche un joueur sur Aligulac, si les informations sont disponibles, la team ainsi que la page liquipedia est retournée.\nLa syntaxe à utiliser est : \n ```!player pseudo```</value>
+  </data>
+  <data name="PlayerCommandMissing" xml:space="preserve">
+    <value>Il manque des paramètres.\nLa syntaxe correcte est : \n ```!search mot_clé```</value>
+  </data>
+  <data name="PredictCommandHelp" xml:space="preserve">
+    <value>Utilise le système de prédiction d'Aligulac (http://aligulac.com/inference/).\nLa syntaxe à utiliser est : \n```!predict Player_A Player_B (Optionnel BO_nb)```\n\nExample :\n```!predict ByuN Dark 3```</value>
+  </data>
+  <data name="PredictCommandMissing" xml:space="preserve">
+    <value>Il manque des paramètres.\nLa syntaxe correcte est :\n```!predict Player_A Player_B (Optionnel BO_nb)```\n\nExample :\n ```!predict ByuN Dark 3```</value>
+  </data>
+  <data name="ProtossQuote" xml:space="preserve">
+    <value>My life for Aiur !</value>
+  </data>
+  <data name="QuoteCommandHelp" xml:space="preserve">
+    <value>Retourne une quote SC2 via le site sc2quoteoftheday.com (et plus)\nLa syntaxe à utiliser est : `!quote (optionnel auteur) (optionnel -count)`\nExemple :\n```\n# Récupère les quotes de l'auteur cité\n!quote Day9\n\n# Retourne le nombre de quote pour l'auteur cité\n!quote Day9 -count\n\n# Retourne tous les auteurs de quotes (en message privé)\n!quote -all```</value>
+  </data>
+  <data name="QuoteCommandNotFound" xml:space="preserve">
+    <value>Je n'ai pas de quote pour **{0}**\nMais celle là est pas mal quand même :\n</value>
+  </data>
+  <data name="QuoteCommandSendMP" xml:space="preserve">
+    <value>Liste envoyée en MP.</value>
+  </data>
+  <data name="RandomQuote" xml:space="preserve">
+    <value>Pour les hommes !</value>
+  </data>
+  <data name="RappelRaceStr" xml:space="preserve">
+    <value>Hello !\nTu as rejoint le Discord **SC2 France** mais tu n'as toujours pas renseigné ta race, quelle race joues-tu ?\nécris : **Zerg**, **Terran**, **Protoss** ou **Random**</value>
+  </data>
+  <data name="TerranQuote" xml:space="preserve">
+    <value>Kaboom Baby !</value>
+  </data>
+  <data name="TopCommandHelp" xml:space="preserve">
+    <value>Utilise le système de classement d'Aligulac.\nLa syntaxe à utiliser est : \n```!top```</value>
+  </data>
+  <data name="TransfersHelp" xml:space="preserve">
+    <value>Retourne la liste des joueurs transférés recemment. Les données sont extraites à partir du wiki TeamLiquid.</value>
+  </data>
+  <data name="WelcomeStr" xml:space="preserve">
+    <value>Bienvenue !\nQuelle race joues-tu ?\nécris : **Zerg**, **Terran**, **Protoss** ou **Random**</value>
+  </data>
+  <data name="ZergQuote" xml:space="preserve">
+    <value>For the Swarm ♥</value>
+  </data>
+</root>
