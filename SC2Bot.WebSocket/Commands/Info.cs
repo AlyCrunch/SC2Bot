@@ -5,12 +5,25 @@ namespace SC2Bot.WebSocket.Commands
 {
     public class Info : ModuleBase
     {
-        // ~say hello -> hello
-        [Command("say"), Summary("Echos a message.")]
-        public async Task Say([Remainder, Summary("The text to echo")] string echo)
+        [Command("yesno"), Summary("Randomly say no or yes")]
+        public async Task YesNo()
         {
-            // ReplyAsync is a method on ModuleBase
-            await ReplyAsync(echo);
+            var imgr = new Helpers.ImgurHelper();
+            var yn = Helpers.GeneralHelper.GetRandom(2);
+
+            string img, str;
+            if (yn == 0)
+            {
+                str = Properties.Resources.yesno_Non;
+                img = await Helpers.GeneralHelper.DownloadImage(await imgr.GetARandomImageAlbum(Properties.Resources.AlbumNo));
+            }
+            else
+            {
+                str = Properties.Resources.yesno_Oui;
+                img = await Helpers.GeneralHelper.DownloadImage(await imgr.GetARandomImageAlbum(Properties.Resources.AlbumYes));
+            }
+
+            await Context.Channel.SendFileAsync(img, str);
         }
     }
 }

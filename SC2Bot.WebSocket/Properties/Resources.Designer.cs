@@ -61,6 +61,24 @@ namespace SC2Bot.WebSocket.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à DnLfM.
+        /// </summary>
+        internal static string AlbumNo {
+            get {
+                return ResourceManager.GetString("AlbumNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à vZaFU.
+        /// </summary>
+        internal static string AlbumYes {
+            get {
+                return ResourceManager.GetString("AlbumYes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Utilise le site Aligulac (http://aligulac.com/periods/)\nPermet de voir la race dominante et dominée. \n```# Renvoie les 10 derniers résultats\n!balance```\n\n```# Renvoie les résultats depuis une date, si le -to est renseigné, les résultats sont compris entre ces deux dates\n!balance -from 02/06/2013 -to 23/12/2013```\n\n```# Donne un résumé des races OP\n!balance -op\n\n# Donne un résumé des races faibles\n!balance -weak```\n\n```# Condense et fait la moyenne du resultat\n!balance -avg```.
         /// </summary>
         internal static string BalanceCommandHelp {
@@ -205,11 +223,20 @@ namespace SC2Bot.WebSocket.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à For the Swarm ♥.
+        ///   Recherche une chaîne localisée semblable à La réponse est **non**.
         /// </summary>
-        internal static string ZergQuote {
+        internal static string yesno_Non {
             get {
-                return ResourceManager.GetString("ZergQuote", resourceCulture);
+                return ResourceManager.GetString("yesno_Non", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à La réponse est **oui**.
+        /// </summary>
+        internal static string yesno_Oui {
+            get {
+                return ResourceManager.GetString("yesno_Oui", resourceCulture);
             }
         }
     }

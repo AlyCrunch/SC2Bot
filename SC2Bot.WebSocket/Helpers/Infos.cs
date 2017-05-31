@@ -26,5 +26,16 @@ namespace SC2Bot.WebSocket.Helpers
                 return _aligulac;
             }
         }
+
+        private static string _imgurAPI = string.Empty;
+        public static string ImgurAPI
+        {
+            get
+            {
+                if (_imgurAPI == null || _imgurAPI == string.Empty)
+                    _imgurAPI = Environment.GetEnvironmentVariable("APIImgur");
+                return _imgurAPI;
+            }
+        }
     }
 }

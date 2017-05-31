@@ -50,6 +50,12 @@
     <Reference Include="Discord.Net.WebSocket, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Discord.Net.WebSocket.1.0.0-rc2\lib\net45\Discord.Net.WebSocket.dll</HintPath>
     </Reference>
+    <Reference Include="GiphyDotNet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GiphyDotNet.1.0.0.0\lib\GiphyDotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="Imgur.API, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Imgur.API.5.0.0-beta1\lib\net45\Imgur.API.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.1.1.1\lib\netstandard1.1\Microsoft.Extensions.DependencyInjection.dll</HintPath>
     </Reference>
@@ -113,7 +119,7 @@
       <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Net.Http.4.3.0\lib\net46\System.Net.Http.dll</HintPath>
+      <HintPath>..\packages\System.Net.Http.4.3.1\lib\net46\System.Net.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
@@ -159,6 +165,8 @@
     <Compile Include="Commands\Info.cs" />
     <Compile Include="Commands\Quotes.cs" />
     <Compile Include="Commands\Sample.cs" />
+    <Compile Include="Helpers\GeneralHelper.cs" />
+    <Compile Include="Helpers\ImgurHelper.cs" />
     <Compile Include="Helpers\Infos.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

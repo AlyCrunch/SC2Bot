@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AlbumNo" xml:space="preserve">
+    <value>DnLfM</value>
+  </data>
+  <data name="AlbumYes" xml:space="preserve">
+    <value>vZaFU</value>
+  </data>
   <data name="BalanceCommandHelp" xml:space="preserve">
     <value>Utilise le site Aligulac (http://aligulac.com/periods/)\nPermet de voir la race dominante et dominée. \n```# Renvoie les 10 derniers résultats\n!balance```\n\n```# Renvoie les résultats depuis une date, si le -to est renseigné, les résultats sont compris entre ces deux dates\n!balance -from 02/06/2013 -to 23/12/2013```\n\n```# Donne un résumé des races OP\n!balance -op\n\n# Donne un résumé des races faibles\n!balance -weak```\n\n```# Condense et fait la moyenne du resultat\n!balance -avg```</value>
   </data>
@@ -165,7 +171,10 @@
   <data name="WelcomeStr" xml:space="preserve">
     <value>Bienvenue !\nQuelle race joues-tu ?\nécris : **Zerg**, **Terran**, **Protoss** ou **Random**</value>
   </data>
-  <data name="ZergQuote" xml:space="preserve">
-    <value>For the Swarm ♥</value>
+  <data name="yesno_Non" xml:space="preserve">
+    <value>La réponse est **non**</value>
+  </data>
+  <data name="yesno_Oui" xml:space="preserve">
+    <value>La réponse est **oui**</value>
   </data>
 </root>
