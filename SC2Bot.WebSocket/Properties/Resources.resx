@@ -177,4 +177,7 @@
   <data name="yesno_Oui" xml:space="preserve">
     <value>La réponse est **oui**</value>
   </data>
+  <data name="ZergQuote" xml:space="preserve">
+    <value>For the Swarm ♥</value>
+  </data>
 </root>

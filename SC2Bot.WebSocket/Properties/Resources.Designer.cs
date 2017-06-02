@@ -239,5 +239,14 @@ namespace SC2Bot.WebSocket.Properties {
                 return ResourceManager.GetString("yesno_Oui", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à For the Swarm ♥.
+        /// </summary>
+        internal static string ZergQuote {
+            get {
+                return ResourceManager.GetString("ZergQuote", resourceCulture);
+            }
+        }
     }
 }

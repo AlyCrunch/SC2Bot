@@ -32,12 +32,12 @@ namespace SC2Bot.WebSocket.Helpers
             WebClient client = new WebClient();
             await client.DownloadFileTaskAsync(new Uri(urlPath), local.ToString());
             client.Dispose();
-            /*
-            using (WebClient client = new WebClient())
-            {
-                client.DownloadFileAsync(new Uri(urlPath),local.ToString());
-            }*/
             return local.ToString();
+        }
+
+        public static void RemoveImageTemp(string urlPath)
+        {
+            File.Delete(urlPath);
         }
     }
 }

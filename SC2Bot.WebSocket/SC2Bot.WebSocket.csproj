@@ -162,7 +162,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\General.cs" />
     <Compile Include="Commands\Info.cs" />
+    <Compile Include="Commands\Liquipedia.cs" />
     <Compile Include="Commands\Quotes.cs" />
     <Compile Include="Commands\Sample.cs" />
     <Compile Include="Helpers\GeneralHelper.cs" />
@@ -184,6 +186,10 @@
     <ProjectReference Include="..\Aligulac\Aligulac.csproj">
       <Project>{a621ca65-5344-4152-8f0f-2d8fd13be98a}</Project>
       <Name>Aligulac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Crawlers\Crawlers.csproj">
+      <Project>{33cd67c6-8920-43e5-91a4-90185957dced}</Project>
+      <Name>Crawlers</Name>
     </ProjectReference>
     <ProjectReference Include="..\QuoteOfTheDay\QuoteOfTheDay.csproj">
       <Project>{ae81c929-6a83-4667-aa57-71d9f6b149e4}</Project>
