@@ -163,10 +163,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\General.cs" />
-    <Compile Include="Commands\Info.cs" />
     <Compile Include="Commands\Liquipedia.cs" />
     <Compile Include="Commands\Quotes.cs" />
-    <Compile Include="Commands\Sample.cs" />
     <Compile Include="Helpers\GeneralHelper.cs" />
     <Compile Include="Helpers\ImgurHelper.cs" />
     <Compile Include="Helpers\Infos.cs" />
