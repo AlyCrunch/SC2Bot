@@ -16,8 +16,8 @@ namespace ApplicationNoBot
         {
             try
             {
-                //await Liquipedia();
-                await SpawningTools();
+                await Liquipedia();
+                //await SpawningTools();
             }
             catch (Exception ex)
             {
@@ -28,12 +28,14 @@ namespace ApplicationNoBot
 
         static async Task Liquipedia()
         {
-            var lt = await new Liquipedia().GetTransfert();
+            //var lt = await new Liquipedia().GetCalendarEvents(DateTime.Now, Crawlers.Objects.Liquipedia.Period.Day);
 
-            Console.WriteLine("\n---- Transferts ----");
+            var lt = await new Liquipedia().GetLiveEvents();
+
+            Console.WriteLine("\n---- Events ----");
             foreach (var t in lt)
             {
-                Console.WriteLine($"{t.Date.ToShortDateString()} {t.Players[0].Name} {t.OldTeam.Name} => {t.NewTeam.Name}");
+                Console.WriteLine($"{t.Date.ToString()} {t.Title} {t.Subtitle}");
             }
         }
 

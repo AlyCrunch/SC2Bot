@@ -9,7 +9,6 @@ namespace Crawlers.Objects.Liquipedia
     public enum Period
     {
         Day,
-        Month,
         Week
     }
 }

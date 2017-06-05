@@ -7,9 +7,6 @@ namespace Crawlers
 {
     public class Liquipedia
     {
-        static private string _WEEK = "week";
-        static private string _MONTH = "month";
-
         public async Task<List<Transfert>> GetTransfert()
         {
             string url = "http://wiki.teamliquid.net/starcraft2/Main_Page";
@@ -18,19 +15,24 @@ namespace Crawlers
             return parser.ParsingTransfers(await parser.GetDocumentHTML(url));
         }
 
-        public async Task<List<Event>> GetEvents(DateTime dt, Period p)
+        public async Task<List<Event>> GetCalendarEvents(DateTime dt, Period p)
         {
-            string period = "";
-            if (p == Period.Month)
-                period = _MONTH;
-            else
-                period = _WEEK;
+            string url = $"http://www.teamliquid.net/calendar/?view=week&year={ dt.Year }&month={ dt.Month }&day={ dt.Day }&game=1";
 
-            string url = $"http://www.teamliquid.net/calendar/?view={ period }&year={ dt.Year }&month={ dt.Month }&day={ dt.Day }&game=1";
+            var parser = new Utils.Liquipedia.Parser();
+            if (p == Period.Day)
+                return parser.ParsingEventsDay(await parser.GetDocumentHTML(url), dt);
+            else
+                return parser.ParsingEventsWeek(await parser.GetDocumentHTML(url), dt);
+        }
+
+        public async Task<List<Event>> GetLiveEvents()
+        {
+            string url = $"http://www.teamliquid.net/";
 
             var parser = new Utils.Liquipedia.Parser();
 
-            return parser.ParsingEvents(await parser.GetDocumentHTML(url),p);
+            return parser.ParsingLiveEvents(await parser.GetDocumentHTML(url));
         }
     }
 }
