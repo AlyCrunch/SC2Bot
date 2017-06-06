@@ -45,10 +45,13 @@ namespace SC2Bot.WebSocket.Commands
 
         private Embed CreateEmbedQuote(QuoteOfTheDay.Datas.Quote q)
         {
-            EmbedBuilder eb = new EmbedBuilder();
-            eb.Color = new Color(191, 0, 255);
-            if (q.Image != string.Empty)
-                eb.ThumbnailUrl = q.Image;
+            EmbedBuilder eb = new EmbedBuilder()
+            {
+                Color = new Color(191, 0, 255),
+                ThumbnailUrl = (q.Image != string.Empty) ? q.Image : null,
+                Footer = new EmbedFooterBuilder().WithText($"{q.Date.ToShortDateString()} - {q.Reference.Replace("\\n", "\n")}")
+                                                 .WithIconUrl(@"http://i.imgur.com/yxbWEK0.png")
+            };
 
             eb.AddField(x =>
             {
@@ -56,9 +59,6 @@ namespace SC2Bot.WebSocket.Commands
                 x.Name = q.Author;
                 x.Value = q.Text.Replace("\\n", "\n");
             });
-
-            eb.Footer = new EmbedFooterBuilder().WithText($"{q.Date.ToShortDateString()} - {q.Reference.Replace("\\n", "\n")}")
-                                                .WithIconUrl(@"http://i.imgur.com/yxbWEK0.png");
 
             return eb;
         }
