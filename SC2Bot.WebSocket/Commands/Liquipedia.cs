@@ -13,10 +13,10 @@ namespace SC2Bot.WebSocket.Commands
         public async Task GetTransferList()
         {
             var TL = await new Crawlers.Liquipedia().GetTransfert();
-            await ReplyAsync("", false, CreateEmbedQuote(TL));
+            await ReplyAsync("", false, CreateEmbedTransfer(TL));
         }
 
-        private Embed CreateEmbedQuote(List<Transfert> tl)
+        private Embed CreateEmbedTransfer(List<Transfert> tl)
         {
             EmbedBuilder eb = new EmbedBuilder()
             {
