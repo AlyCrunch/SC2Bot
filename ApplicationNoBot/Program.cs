@@ -28,9 +28,9 @@ namespace ApplicationNoBot
 
         static async Task Liquipedia()
         {
-            //var lt = await new Liquipedia().GetCalendarEvents(DateTime.Now, Crawlers.Objects.Liquipedia.Period.Day);
+            var lt = await new Liquipedia().GetCalendarEvents(DateTime.Now, Crawlers.Objects.Liquipedia.Period.Day);
 
-            var lt = await new Liquipedia().GetLiveEvents();
+            //var lt = await new Liquipedia().GetLiveEvents();
 
             Console.WriteLine("\n---- Events ----");
             foreach (var t in lt)

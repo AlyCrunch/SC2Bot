@@ -1,5 +1,6 @@
 ﻿using Crawlers.Objects.Liquipedia;
 using HtmlAgilityPack;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,6 +14,8 @@ namespace Crawlers.Utils.Liquipedia
 {
     public class Parser
     {
+        private static string URLCalendarModal = "http://www.teamliquid.net/calendar/manage";
+
         public async Task<HtmlDocument> GetDocumentHTML(string URL)
         {
             var response = await new HttpClient().GetByteArrayAsync(URL);
@@ -23,6 +26,36 @@ namespace Crawlers.Utils.Liquipedia
             resultat.LoadHtml(source);
 
             return resultat;
+        }
+
+        private async Task<HtmlDocument> PostModalGetDocumentHTML(string ID)
+        {
+            var client = new HttpClient();
+
+            var requestContent = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("event_id", ID),
+                new KeyValuePair<string, string>("action","view-event-popup")
+            });
+
+            HttpResponseMessage response = await client.PostAsync(URLCalendarModal, requestContent);
+            if (response.IsSuccessStatusCode)
+            {
+                var sr = await response.Content.ReadAsStringAsync();
+                ResultModal r = JsonConvert.DeserializeObject<ResultModal>(sr);
+                var doc = new HtmlDocument();
+                try
+                {
+                    doc.LoadHtml(r.HTML);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.InnerException);
+                }
+                return doc;
+            }
+
+            return null;
         }
 
         public List<Transfert> ParsingTransfers(HtmlDocument page)
@@ -131,6 +164,8 @@ namespace Crawlers.Utils.Liquipedia
             {
                 var nodeIDTitle = e.Descendants().First(x => IsEventIDTitle(x));
                 var nodeSubtitle = e.Descendants().First(x => IsEventSubtitle(x));
+                var wiki = e.Descendants().FirstOrDefault(x => IsWiki(x));
+                var thread = e.Descendants().FirstOrDefault(x => IsThread(x));
                 var dateStr = DateTime.Parse(DateTime.Now.ToShortDateString() + " " + e.Descendants().First(x => IsEventHour(x)).InnerText + "Z");
 
                 var ev = new Event()
@@ -139,6 +174,8 @@ namespace Crawlers.Utils.Liquipedia
                     Title = nodeIDTitle.InnerText,
                     Subtitle = nodeSubtitle.InnerText,
                     Date = dateStr,
+                    Wikipedia = (wiki != null) ? wiki.Attributes["href"].Value : "",
+                    Thread = (thread != null) ? "http://www.teamliquid.net" + thread.Attributes["href"].Value : "",
                     Matches = new List<Match>(),
                     Streams = new List<Stream>()
                 };
@@ -176,7 +213,7 @@ namespace Crawlers.Utils.Liquipedia
                 };
                 return m;
             }
-            
+
             Stream GetStream(HtmlNode n)
             {
                 var flag = (n.Descendants().Any(x => IsLang(x))) ? ExtractFlag(n.Descendants().First(x => IsLang(x)).Attributes["src"].Value) : "";
@@ -221,19 +258,32 @@ namespace Crawlers.Utils.Liquipedia
                 var dateE = date;
                 dateE = DateTime.Parse(date.ToShortDateString() + " " + time + "Z");
 
+                /*
+                string thread, wiki;
+                var docModal = await PostModalGetDocumentHTML(ID);
+                var wikiNode = docModal.DocumentNode.Descendants().First(x => IsWikiEvent(x));
+                wiki = (wikiNode != null) ? wikiNode.Attributes["value"].Value : "";
+                var threadNode = docModal.DocumentNode.Descendants().First(x => IsThreadEvent(x));
+                thread = (threadNode != null) ? threadNode.Attributes["value"].Value : "";
+                */
+
                 listEvent.Add(new Event()
                 {
                     ID = ID,
                     Title = title,
                     Subtitle = subtitle,
                     Date = dateE
+                    //Thread = thread,
+                    //Wikipedia = wiki
                 });
+
+
             }
 
             return listEvent;
         }
 
-        #region Filters
+        #region Filters 
 
         #region Transfer
         private bool IsTransfertLine(HtmlNode t) => (t.Name == "div" && t.Attributes["class"] != null && t.Attributes["class"].Value.Contains("divRow"));
@@ -261,6 +311,8 @@ namespace Crawlers.Utils.Liquipedia
         private bool IsWiki(HtmlNode n) => (n.Name == "a" && n.Attributes["class"] != null && n.Attributes["class"].Value.Contains("ev-btn wikibtn"));
         private bool IsThread(HtmlNode n) => (n.Name == "a" && n.Attributes["class"] != null && n.Attributes["class"].Value.Contains("ev-btn lrbtn"));
         private bool IsLang(HtmlNode n) => (n.Name == "img");
+        private bool IsWikiEvent(HtmlNode n) => (n.Name == "input" && n.Attributes["name"] != null && n.Attributes["name"].Value.Equals("wiki"));
+        private bool IsThreadEvent(HtmlNode n) => (n.Name == "input" && n.Attributes["name"] != null && n.Attributes["name"].Value.Equals("thread"));
         #endregion
 
         #endregion

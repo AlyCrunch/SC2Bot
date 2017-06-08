@@ -51,6 +51,7 @@
     <Compile Include="Liquipedia.cs" />
     <Compile Include="Objects\Liquipedia\Event.cs" />
     <Compile Include="Objects\Liquipedia\Period.cs" />
+    <Compile Include="Objects\Liquipedia\ResultModal.cs" />
     <Compile Include="Objects\Liquipedia\Transfert.cs" />
     <Compile Include="Objects\SpawningTools\Result.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
