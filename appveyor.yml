@@ -7,5 +7,7 @@ nuget:
 build:
   parallel: true
   verbosity: minimal
+cache:
+- packages -> **\packages.config
 before_build:
-- nuget restore
+- nuget restore -Verbosity quiet

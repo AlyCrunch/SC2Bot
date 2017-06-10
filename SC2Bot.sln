@@ -20,6 +20,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuoteOfTheDay", "QuoteOfTheDay\QuoteOfTheDay.csproj", "{AE81C929-6A83-4667-AA57-71D9F6B149E4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SC2Bot.WebSocket", "SC2Bot.WebSocket\SC2Bot.WebSocket.csproj", "{C0BECBA6-99C9-4439-A01F-B12E5BFB7F46}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SC2Bot.Tests", "SC2Bot.Tests\SC2Bot.Tests.csproj", "{F046C04D-F736-4EF7-B579-816C7834898F}"
 EndProject
 Global
