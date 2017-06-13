@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SC2Bot", "SC2Bot\SC2Bot.csproj", "{EB2EA6CF-99D7-4CB6-A985-FEC2C0995515}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuoteOfTheDay", "QuoteOfTheDay\QuoteOfTheDay.csproj", "{AE81C929-6A83-4667-AA57-71D9F6B149E4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SC2Bot.WebSocket", "SC2Bot.WebSocket\SC2Bot.WebSocket.csproj", "{C0BECBA6-99C9-4439-A01F-B12E5BFB7F46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SC2Bot.Tests", "SC2Bot.Tests\SC2Bot.Tests.csproj", "{F046C04D-F736-4EF7-B579-816C7834898F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{C0BECBA6-99C9-4439-A01F-B12E5BFB7F46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0BECBA6-99C9-4439-A01F-B12E5BFB7F46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0BECBA6-99C9-4439-A01F-B12E5BFB7F46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F046C04D-F736-4EF7-B579-816C7834898F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F046C04D-F736-4EF7-B579-816C7834898F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F046C04D-F736-4EF7-B579-816C7834898F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F046C04D-F736-4EF7-B579-816C7834898F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
