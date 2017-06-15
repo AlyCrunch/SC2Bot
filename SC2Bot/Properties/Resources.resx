@@ -156,6 +156,9 @@
   <data name="TerranQuote" xml:space="preserve">
     <value>Kaboom Baby !</value>
   </data>
+  <data name="test" xml:space="preserve">
+    <value>coucou</value>
+  </data>
   <data name="TopCommandHelp" xml:space="preserve">
     <value>Utilise le système de classement d'Aligulac.\nLa syntaxe à utiliser est : \n```!top```</value>
   </data>

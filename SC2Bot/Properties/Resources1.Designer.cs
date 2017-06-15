@@ -178,6 +178,15 @@ namespace SC2Bot.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à coucou.
+        /// </summary>
+        internal static string test {
+            get {
+                return ResourceManager.GetString("test", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Utilise le système de classement d&apos;Aligulac.\nLa syntaxe à utiliser est : \n```!top```.
         /// </summary>
         internal static string TopCommandHelp {

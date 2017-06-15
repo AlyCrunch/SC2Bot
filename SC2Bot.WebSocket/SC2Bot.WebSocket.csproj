@@ -162,6 +162,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\Aligulac.cs" />
     <Compile Include="Commands\General.cs" />
     <Compile Include="Commands\Liquipedia.cs" />
     <Compile Include="Commands\Quotes.cs" />

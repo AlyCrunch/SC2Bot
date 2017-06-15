@@ -10,7 +10,6 @@ namespace SC2Bot.WebSocket.Commands
         [Command("commands"), Summary("Get list commands")]
         public async Task ListCommands()
         {
-            
             await ReplyAsync("");
         }
 
@@ -43,7 +42,7 @@ namespace SC2Bot.WebSocket.Commands
             await ReplyAsync(await Roles(Context.Message.Author, race));
         }
 
-        [Command("youare"), Summary("Choose your weapon, noob."), RequireUserPermission(GuildPermission.Administrator), Alias("tues")]
+        [Command("assign"), Summary("Choose your weapon, noob."), RequireUserPermission(GuildPermission.Administrator)]
         public async Task AssimilateSomeone([Summary("User")] IUser user, [Summary("Race name.")] string race)
         {
             await ReplyAsync(await Roles(user, race));

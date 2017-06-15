@@ -88,6 +88,42 @@ namespace SC2Bot.WebSocket.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;:protoss:272809554553602049&gt;.
+        /// </summary>
+        internal static string Emoji_Protoss {
+            get {
+                return ResourceManager.GetString("Emoji_Protoss", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;:random:272816235752849409&gt;.
+        /// </summary>
+        internal static string Emoji_Random {
+            get {
+                return ResourceManager.GetString("Emoji_Random", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;:terran:272812377513394186&gt;.
+        /// </summary>
+        internal static string Emoji_Terran {
+            get {
+                return ResourceManager.GetString("Emoji_Terran", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;:zerg:272812425185853441&gt;.
+        /// </summary>
+        internal static string Emoji_Zerg {
+            get {
+                return ResourceManager.GetString("Emoji_Zerg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Il y a plusieurs commandes disponibles : `!top` `!predict` `!quote` `!balance` `!transfer`\nIl suffit d&apos;utiliser le mot clé \&quot;**-help**\&quot; pour plus d&apos;information, exemple :\n`!predict -help`.
         /// </summary>
         internal static string HelpCommand {

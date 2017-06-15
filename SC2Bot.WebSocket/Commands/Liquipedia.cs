@@ -10,6 +10,8 @@ namespace SC2Bot.WebSocket.Commands
 {
     public class Liquipedia : ModuleBase
     {
+        private Color LiquipediaColor = new Color(37, 70, 115);
+
         [Command("transfer"), Summary("Get list of transfered players.")]
         public async Task GetTransferList()
         {
@@ -53,7 +55,7 @@ namespace SC2Bot.WebSocket.Commands
         {
             EmbedBuilder eb = new EmbedBuilder()
             {
-                Color = new Color(102, 0, 102),
+                Color = LiquipediaColor,
                 Author = new EmbedAuthorBuilder().WithName("Liquipedia")
                                                 .WithIconUrl("http://wiki.teamliquid.net/starcraft2/skins/LiquiFlow/images/liquipedia_logo.png")
                                                 .WithUrl("http://wiki.teamliquid.net/starcraft2/Main_Page")
@@ -100,7 +102,7 @@ namespace SC2Bot.WebSocket.Commands
 
             EmbedBuilder eb = new EmbedBuilder()
             {
-                Color = new Color(102, 0, 102),
+                Color = LiquipediaColor,
                 Author = eab,
                 Title = e.Title,
                 Description = e.Subtitle
@@ -163,7 +165,7 @@ namespace SC2Bot.WebSocket.Commands
         {
             EmbedBuilder eb = new EmbedBuilder()
             {
-                Color = new Color(102, 0, 102),
+                Color = LiquipediaColor,
                 Author = new EmbedAuthorBuilder().WithName("teamliquid")
                                                     .WithIconUrl("http://www.teamliquid.net/images/frontpage/games/tl_16.png")
             };

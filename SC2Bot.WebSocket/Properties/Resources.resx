@@ -180,4 +180,16 @@
   <data name="ZergQuote" xml:space="preserve">
     <value>For the Swarm ♥</value>
   </data>
+  <data name="Emoji_Protoss" xml:space="preserve">
+    <value>&lt;:protoss:272809554553602049&gt;</value>
+  </data>
+  <data name="Emoji_Random" xml:space="preserve">
+    <value>&lt;:random:272816235752849409&gt;</value>
+  </data>
+  <data name="Emoji_Terran" xml:space="preserve">
+    <value>&lt;:terran:272812377513394186&gt;</value>
+  </data>
+  <data name="Emoji_Zerg" xml:space="preserve">
+    <value>&lt;:zerg:272812425185853441&gt;</value>
+  </data>
 </root>
