@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,14 +19,29 @@ namespace Crawlers.Utils.Liquipedia
 
         public async Task<HtmlDocument> GetDocumentHTML(string URL)
         {
-            var response = await new HttpClient().GetByteArrayAsync(URL);
+            var client = new HttpClient();
 
-            String source = Encoding.GetEncoding("utf-8").GetString(response, 0, response.Length - 1);
-            source = WebUtility.HtmlDecode(source);
-            HtmlDocument resultat = new HtmlDocument();
-            resultat.LoadHtml(source);
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(URL),
+                Method = HttpMethod.Get,
+            };
 
-            return resultat;
+            var headers = request.Headers;
+
+            headers.Add("Accept-Language","fr");
+
+            var response = await client.SendAsync(request);//.GetByteArrayAsync(URL);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var sr = await response.Content.ReadAsStringAsync();
+                HtmlDocument resultat = new HtmlDocument();
+                resultat.LoadHtml(sr);
+
+                return resultat;
+            }
+            return null;
         }
 
         private async Task<HtmlDocument> PostModalGetDocumentHTML(string ID)
@@ -290,7 +306,7 @@ namespace Crawlers.Utils.Liquipedia
         private bool IsTransfertTable(HtmlNode t) => (t.Name == "div" && t.Attributes["class"] != null && t.Attributes["class"].Value.Contains("divTable mainpage-transfer Ref"));
         private bool IsDate(HtmlNode t) => (t.Attributes["class"] != null && t.Attributes["class"].Value.Equals("divCell Date"));
         private bool IsPlayer(HtmlNode t) => (t.Attributes["class"] != null && t.Attributes["class"].Value.Equals("divCell Name"));
-        private bool IsTeam(HtmlNode t) => (t.Attributes["class"] != null && t.Attributes["class"].Value.Equals("divCell Team"));
+        private bool IsTeam(HtmlNode t) => (t.Attributes["class"] != null && t.Attributes["class"].Value.Contains("divCell Team"));
         #endregion
 
         #region Events

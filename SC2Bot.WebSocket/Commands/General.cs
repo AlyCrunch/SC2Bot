@@ -7,6 +7,13 @@ namespace SC2Bot.WebSocket.Commands
 {
     public class General : ModuleBase
     {
+        [Command("commands"), Summary("Get list commands")]
+        public async Task ListCommands()
+        {
+            
+            await ReplyAsync("");
+        }
+
         [Command("yesno"), Summary("Randomly say no or yes")]
         public async Task YesNo()
         {
@@ -30,13 +37,13 @@ namespace SC2Bot.WebSocket.Commands
             Helpers.GeneralHelper.RemoveImageTemp(img);
         }
 
-        [Command("jesuis"), Summary("Choose your weapon, noob."), Alias("iam")]
+        [Command("iam"), Summary("Choose your weapon, noob."), Alias("jesuis")]
         public async Task Assimilate([Summary("Race name.")] string race)
         {
             await ReplyAsync(await Roles(Context.Message.Author, race));
         }
 
-        [Command("tues"), Summary("Choose your weapon, noob."), RequireUserPermission(GuildPermission.Administrator), Alias("youare")]
+        [Command("youare"), Summary("Choose your weapon, noob."), RequireUserPermission(GuildPermission.Administrator), Alias("tues")]
         public async Task AssimilateSomeone([Summary("User")] IUser user, [Summary("Race name.")] string race)
         {
             await ReplyAsync(await Roles(user, race));

@@ -1,6 +1,7 @@
 ﻿using Crawlers.Objects.Liquipedia;
 using Discord;
 using Discord.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,14 +17,36 @@ namespace SC2Bot.WebSocket.Commands
             await ReplyAsync("", false, CreateEmbedTransfer(TL));
         }
 
-        [Command("live"), Summary("Get list of transfered players.")]
+        [Command("live"), Summary("Get actual events.")]
         public async Task GetLiveEvents()
         {
             var LE = await new Crawlers.Liquipedia().GetLiveEvents();
+
+            if (LE.Count() == 0) await ReplyAsync("Pas d'événement pour le moment.");
+
             foreach (var e in LE)
             {
                 await ReplyAsync("", false, CreateEmbedLiveEvent(e));
             }
+        }
+
+        [Command("event"), Summary("Get all events of the day.")]
+        public async Task GetEventsDay()
+        {
+            await SendEvents(await new Crawlers.Liquipedia().GetCalendarEvents(DateTime.Now, Period.Day));
+        }
+
+        [Command("event"), Summary("Get all events of the day or the week.")]
+        public async Task GetEventsType([Summary("Day or Event parameter")] string type)
+        {
+            await SendEvents(await new Crawlers.Liquipedia().GetCalendarEvents(DateTime.Now, IsWeek(type)));
+        }
+        
+        private async Task SendEvents(List<Event> es)
+        {
+            var gd = es.GroupBy(x => x.Date.Date);
+            foreach (var esd in gd)
+                await ReplyAsync("", false, CreateEmbedDayEvent(esd));
         }
 
         private Embed CreateEmbedTransfer(List<Transfert> tl)
@@ -72,7 +95,7 @@ namespace SC2Bot.WebSocket.Commands
                                                     .WithIconUrl("http://www.teamliquid.net/images/frontpage/games/tl_16.png")
                                                     .WithUrl(e.Wikipedia);
             else
-                eab = new EmbedAuthorBuilder().WithName("Liquipedia")
+                eab = new EmbedAuthorBuilder().WithName("teamliquid")
                                                     .WithIconUrl("http://www.teamliquid.net/images/frontpage/games/tl_16.png");
 
             EmbedBuilder eb = new EmbedBuilder()
@@ -136,6 +159,42 @@ namespace SC2Bot.WebSocket.Commands
             return eb;
         }
 
+        private Embed CreateEmbedDayEvent(IGrouping<DateTime, Event> events)
+        {
+            EmbedBuilder eb = new EmbedBuilder()
+            {
+                Color = new Color(102, 0, 102),
+                Author = new EmbedAuthorBuilder().WithName("teamliquid")
+                                                    .WithIconUrl("http://www.teamliquid.net/images/frontpage/games/tl_16.png")
+            };
+            var c = new System.Globalization.CultureInfo("fr-FR");
+            
+            
+            eb.AddField(x =>
+            {
+                x.IsInline = true;
+                x.Name = c.DateTimeFormat.GetDayName(events.Key.DayOfWeek);
+                x.Value = string.Join("\n", events.Select(t => $"**{t.Title}**\n{t.Subtitle}\n"));
+            });
+
+
+            eb.AddField(x =>
+            {
+                x.IsInline = true;
+                x.Name = "·";
+                x.Value = string.Join("\n", events.Select(t => $"------------------------\n\n"));
+            });
+
+            eb.AddField(x =>
+            {
+                x.IsInline = true;
+                x.Name = events.Key.ToString("dd MMMM");
+                x.Value = string.Join("\n", events.Select(t => $"{t.Date.ToShortTimeString()}\n\n"));
+            });
+
+            return eb;
+        }
+
         private string GetLinks(Event e)
         {
             string rtnListLinks = string.Empty;
@@ -152,5 +211,7 @@ namespace SC2Bot.WebSocket.Commands
 
             return rtnListLinks;
         }
+
+        private Period IsWeek(string s) => (s.ToLower() == "week") ? Period.Week : Period.Day;
     }
 }
