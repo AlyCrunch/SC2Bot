@@ -10,7 +10,7 @@ namespace SC2Bot.WebSocket.Commands
 {
     public class Liquipedia : ModuleBase
     {
-        private Color LiquipediaColor = new Color(37, 70, 115);
+        private static Color LiquipediaColor = new Color(37, 70, 115);
 
         [Command("transfer"), Summary("Get list of transfered players.")]
         public async Task GetTransferList()
@@ -51,7 +51,7 @@ namespace SC2Bot.WebSocket.Commands
                 await ReplyAsync("", false, CreateEmbedDayEvent(esd));
         }
 
-        private Embed CreateEmbedTransfer(List<Transfert> tl)
+        private static Embed CreateEmbedTransfer(List<Transfert> tl)
         {
             EmbedBuilder eb = new EmbedBuilder()
             {
@@ -88,7 +88,7 @@ namespace SC2Bot.WebSocket.Commands
             return eb;
         }
 
-        private Embed CreateEmbedLiveEvent(Event e)
+        private static Embed CreateEmbedLiveEvent(Event e)
         {
             EmbedAuthorBuilder eab = null;
 
@@ -161,7 +161,7 @@ namespace SC2Bot.WebSocket.Commands
             return eb;
         }
 
-        private Embed CreateEmbedDayEvent(IGrouping<DateTime, Event> events)
+        private static Embed CreateEmbedDayEvent(IGrouping<DateTime, Event> events)
         {
             EmbedBuilder eb = new EmbedBuilder()
             {
@@ -197,7 +197,7 @@ namespace SC2Bot.WebSocket.Commands
             return eb;
         }
 
-        private string GetLinks(Event e)
+        private static string GetLinks(Event e)
         {
             string rtnListLinks = string.Empty;
 
@@ -215,5 +215,21 @@ namespace SC2Bot.WebSocket.Commands
         }
 
         private Period IsWeek(string s) => (s.ToLower() == "week") ? Period.Week : Period.Day;
+
+        public static async Task<List<Event>> GetEventOfTheDay()
+        {
+            var es = await new Crawlers.Liquipedia().GetCalendarEvents(DateTime.Now, Period.Day);
+            var gd = es.GroupBy(x => x.Date.Date);
+            return gd.First().ToList();
+        }
+
+        public static IEnumerable<Embed> GetLiveEventsExt()
+        {
+            var LE = new Crawlers.Liquipedia().GetLiveEvents().Result;
+            foreach (var e in LE)
+            {
+                yield return CreateEmbedLiveEvent(e);
+            }
+        }
     }
 }

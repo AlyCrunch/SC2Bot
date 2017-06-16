@@ -11,6 +11,9 @@ namespace SC2Bot.WebSocket
     {
         private CommandService commands;
         private DiscordSocketClient client;
+        private NonCommands.EventTimer events = new NonCommands.EventTimer();
+        private SocketGuild guild;
+        private SocketTextChannel channel;
 
         public static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
@@ -30,6 +33,12 @@ namespace SC2Bot.WebSocket
             client.Ready += () =>
             {
                 Console.WriteLine("Yolo swagghetti");
+
+                guild = client.GetGuild(139482122548281345);
+                channel = guild.GetTextChannel(269901596266201089);
+
+                events.InitialiseAutoEvent(channel);
+
                 return Task.CompletedTask;
             };
 
