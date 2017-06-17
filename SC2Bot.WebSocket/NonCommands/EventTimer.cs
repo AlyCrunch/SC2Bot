@@ -1,64 +1,70 @@
 ﻿using System;
-using Discord;
 using System.Timers;
 using Discord.WebSocket;
+using System.Collections.Generic;
 
 namespace SC2Bot.WebSocket.NonCommands
 {
     public class EventTimer
     {
         SocketTextChannel _channel;
+        Timer _t = null;
+        Dictionary<string, Timer> _eT;
 
         public void InitialiseAutoEvent(SocketTextChannel channel)
         {
-            Console.WriteLine("### First Day Events ###");
             _channel = channel;
             ScheduleEvents(new object(), new EventArgs() as ElapsedEventArgs);
         }
 
         void ScheduleDayEvents()
         {
-            Console.WriteLine("### creating Day+1 event ###");
-
             DateTime nowTime = DateTime.Now;
             DateTime scheduledTime = nowTime.AddDays(1).Date;
-            
             double tickTime = (double)(scheduledTime - DateTime.Now).TotalMilliseconds;
-            var t = new Timer(tickTime);
-            t.Elapsed += new ElapsedEventHandler(ScheduleEvents);
-            t.Start();
+            
+            _t = new Timer(tickTime);
+            _t.Elapsed += new ElapsedEventHandler(ScheduleEvents);
+            _t.Start();
         }
 
         async void ScheduleEvents(object sender, ElapsedEventArgs e)
         {
-            Console.WriteLine("### Get all events of the day ### \n");
             var events = await Commands.Liquipedia.GetEventOfTheDay();
 
-            foreach(var ev in events)
+            if (_t != null)
+                _t.Stop();
+
+            _eT = new Dictionary<string, Timer>();
+
+            foreach (var ev in events)
             {
                 if (ev.Date < DateTime.Now) continue;
-                
+
                 DateTime nowTime = DateTime.Now;
                 DateTime scheduledTime = ev.Date;
-                double tickTime = (double)(scheduledTime - DateTime.Now).TotalMilliseconds;
+                double tickTime = (scheduledTime - DateTime.Now).TotalMilliseconds;
                 
-                Console.WriteLine($"--- Events created : {ev.Title} in {tickTime}ms ({ev.Date.ToShortTimeString()}) --- \n");
+                string key = ev.Date.ToShortTimeString();
 
-                var t = new Timer(tickTime);
-                t.Elapsed += new ElapsedEventHandler(ScheduleEvent);
-                t.Start();
+                _eT.Add(key, new Timer(tickTime));
+                _eT[key].Elapsed += new ElapsedEventHandler(ScheduleEvent);
+                _eT[key].Start();
             }
 
-            Console.WriteLine("### Day Events Finished ### \n\n");
             ScheduleDayEvents();
         }
 
         async void ScheduleEvent(object sender, ElapsedEventArgs e)
         {
-            foreach(var l in Commands.Liquipedia.GetLiveEventsExt())
+            string key = e.SignalTime.ToShortTimeString();
+            _eT[key].Stop();
+            
+            foreach (var l in Commands.Liquipedia.GetLiveEventsExt())
             {
                 await _channel.SendMessageAsync("", false, l);
             }
+            _eT.Remove(key);
         }
     }
 }

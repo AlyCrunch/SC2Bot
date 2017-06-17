@@ -60,7 +60,10 @@ namespace AligulacSC2
 
 
             if (From != new DateTime())
-                listP.Results = FilterFromToPeriod(listP, From, To);
+                if (To != new DateTime())
+                    listP.Results = FilterFromToPeriod(listP, From, To);
+                else
+                    listP.Results = FilterFromToPeriod(listP, From, DateTime.Now);
 
             if (op)
                 listP.Results = OpPeriod(listP);
@@ -69,7 +72,23 @@ namespace AligulacSC2
                 listP.Results = WeakPeriod(listP);
 
             if (avg)
-                listP.Results = AveragePeriod(listP);
+                listP.Results = AveragePeriod(listP.Results);
+
+            return listP;
+        }
+
+        async public Task<GenericResult<Period>> BalanceByMonth(DateTime From, DateTime To, int limit = 0)
+        {
+            var listP = await RestClient.GetPeriods(_KEY_, limit);
+
+            if (From != new DateTime())
+                if (To != new DateTime())
+                    listP.Results = FilterFromToPeriod(listP, From, To);
+                else
+                    listP.Results = FilterFromToPeriod(listP, From, DateTime.Now);
+
+            var groupesElements = listP.Results.GroupBy(p => p.StartDate.Month);
+
 
             return listP;
         }
@@ -179,7 +198,7 @@ namespace AligulacSC2
                     }
                     else
                         rtnStr += bresume;
-                        
+
                     rtnArrStr.Add(rtnStr);
                 }
 
@@ -294,10 +313,9 @@ namespace AligulacSC2
             return tempList;
         }
 
-        private Period[] AveragePeriod(GenericResult<Period> pt)
+        private Period[] AveragePeriod(Period[] ps)
         {
             Period p = new Period();
-            var ps = pt.Results;
             int l = ps.Length;
             string from = ps[0].Start;
             string to = ps[l - 1].End;
