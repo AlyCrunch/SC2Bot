@@ -35,7 +35,7 @@ namespace SC2Bot.WebSocket
                 Console.WriteLine("Yolo swagghetti");
 
                 guild = client.GetGuild(139482122548281345);
-                channel = guild.GetTextChannel(269901596266201089);
+                channel = guild.GetTextChannel(139482122548281345);
 
                 events.InitialiseAutoEvent(channel);
 

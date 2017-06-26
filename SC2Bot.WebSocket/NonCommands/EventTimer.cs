@@ -40,16 +40,18 @@ namespace SC2Bot.WebSocket.NonCommands
             foreach (var ev in events)
             {
                 if (ev.Date < DateTime.Now) continue;
+                if (_eT.ContainsKey(ev.Date.ToShortTimeString())) continue;
 
                 DateTime nowTime = DateTime.Now;
                 DateTime scheduledTime = ev.Date;
                 double tickTime = (scheduledTime - DateTime.Now).TotalMilliseconds;
                 
                 string key = ev.Date.ToShortTimeString();
-
+                
                 _eT.Add(key, new Timer(tickTime));
                 _eT[key].Elapsed += new ElapsedEventHandler(ScheduleEvent);
                 _eT[key].Start();
+                Console.WriteLine($"Event créé : {ev.Title} - {ev.Date.ToShortDateString()}-{ev.Date.ToShortTimeString()} ({tickTime / 1000}s)");
             }
 
             ScheduleDayEvents();
