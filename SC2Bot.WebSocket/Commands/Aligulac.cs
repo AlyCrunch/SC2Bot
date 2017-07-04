@@ -22,7 +22,7 @@ namespace SC2Bot.WebSocket.Commands
             var retPred = await al.Predict(player1, player2, BO.ToString());
 
             if (string.IsNullOrEmpty(retPred.Error))
-                await ReplyAsync("", false, CreateEmbedTransfer(retPred));
+                await ReplyAsync("", false, CreateEmbedPrediction(retPred));
             else
                 await ReplyAsync(retPred.Error);
         }
@@ -34,7 +34,7 @@ namespace SC2Bot.WebSocket.Commands
             await ReplyAsync("", false, CreateEmbedTop(top, NbTop));
         }
 
-        private Embed CreateEmbedTransfer(o.Prediction p)
+        private Embed CreateEmbedPrediction(o.Prediction p)
         {
             EmbedBuilder eb = new EmbedBuilder()
             {
@@ -43,6 +43,7 @@ namespace SC2Bot.WebSocket.Commands
                                                 .WithIconUrl("http://i.imgur.com/HcSfSR2.png")
                                                 .WithUrl(p.URL)
             };
+            p.Outcomes = p.Outcomes.OrderByDescending(x => x.Prob).ToArray();
 
             eb.AddField(x =>
             {

@@ -1,5 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
+using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,6 +9,8 @@ namespace SC2Bot.WebSocket.Commands
 {
     public class General : ModuleBase
     {
+        private Color GeneralColor = new Color(0, 204, 102);
+
         [Command("commands"), Summary("Get list commands")]
         public async Task ListCommands()
         {
@@ -46,6 +50,48 @@ namespace SC2Bot.WebSocket.Commands
         public async Task AssimilateSomeone([Summary("User")] IUser user, [Summary("Race name.")] string race)
         {
             await ReplyAsync(await Roles(user, race));
+        }
+
+        [Command("whosplaying"), Summary("Get all games and players")]
+        public async Task WhosPlayingAll()
+        {
+            var allUsers = await Context.Guild.GetUsersAsync();
+            var players = new Helpers.WhosPlaying().GetPlayers(allUsers);
+
+            if (players == null) await ReplyAsync("Personne ne joue.");
+            else await ReplyAsync("", false, CreateEmbedWhosPlaying(players));
+        }
+
+        [Command("whosplaying"), Summary("Get players by a specified game")]
+        public async Task WhosPlayingByAGame([Summary("Game")] string game)
+        {
+            var allUsers = await Context.Guild.GetUsersAsync();
+            var players = new Helpers.WhosPlaying().GetPlayersByGame(game, allUsers);
+
+            if (players == null) await ReplyAsync("Personne ne joue à " + game);
+            else await ReplyAsync("", false, CreateEmbedWhosPlaying(players));
+        }
+
+        private Embed CreateEmbedWhosPlaying(IEnumerable<Tuple<string, IEnumerable<IUser>>> GamesPlayer)
+        {
+            EmbedBuilder eb = new EmbedBuilder()
+            {
+                Color = GeneralColor,
+                Author = new EmbedAuthorBuilder().WithName("Who's playing")
+            };
+
+            foreach (var game in GamesPlayer)
+            {
+                List<IUser> u = game.Item2.ToList();
+                eb.AddField(x =>
+                {
+                    x.IsInline = false;
+                    x.Name = game.Item1;
+                    x.Value = string.Join(", ", u.Select(m => m.Mention));
+                });
+            }
+
+            return eb;
         }
 
         private async Task<string> Roles(IUser u, string race)
