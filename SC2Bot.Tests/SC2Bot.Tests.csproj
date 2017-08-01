@@ -76,9 +76,9 @@
       <Project>{a621ca65-5344-4152-8f0f-2d8fd13be98a}</Project>
       <Name>Aligulac</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SC2Bot\SC2Bot.csproj">
+    <ProjectReference Include="..\SC2Bot\old.SC2Bot.csproj">
       <Project>{eb2ea6cf-99d7-4cb6-a985-fec2c0995515}</Project>
-      <Name>SC2Bot</Name>
+      <Name>old.SC2Bot</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

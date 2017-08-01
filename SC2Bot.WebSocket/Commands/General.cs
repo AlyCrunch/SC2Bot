@@ -41,18 +41,20 @@ namespace SC2Bot.WebSocket.Commands
         }
 
         [Command("iam"), Summary("Choose your weapon, noob."), Alias("jesuis")]
-        public async Task Assimilate([Summary("Race name.")] string race)
+        public async Task Assimilate([Summary("Race name.")] string race, [Summary("Second main race name.")] string seconde = "nope")
         {
-            await ReplyAsync(await Roles(Context.Message.Author, race));
+            var config = GetConfigUserRoles(Context.Message.Author.Id);
+            await ReplyAsync(await Helpers.GeneralHelper.Roles(config.Result.Item1, config.Result.Item2, new List<string>() { race, seconde }));
         }
 
         [Command("assign"), Summary("Choose your weapon, noob."), RequireUserPermission(GuildPermission.Administrator)]
-        public async Task AssimilateSomeone([Summary("User")] IUser user, [Summary("Race name.")] string race)
+        public async Task AssimilateSomeone([Summary("User")] IUser user, [Summary("Main race name.")] string race, [Summary("Second main race name.")] string seconde = "nope")
         {
-            await ReplyAsync(await Roles(user, race));
+            var config = GetConfigUserRoles(user.Id);
+            await ReplyAsync(await Helpers.GeneralHelper.Roles(config.Result.Item1, config.Result.Item2, new List<string>() { race, seconde }));
         }
 
-        [Command("whosplaying"), Summary("Get all games and players")]
+        [Command("whosplaying"), Summary("Get all players grouped by games"), Alias("wspl")]
         public async Task WhosPlayingAll()
         {
             var allUsers = await Context.Guild.GetUsersAsync();
@@ -62,7 +64,7 @@ namespace SC2Bot.WebSocket.Commands
             else await ReplyAsync("", false, CreateEmbedWhosPlaying(players));
         }
 
-        [Command("whosplaying"), Summary("Get players by a specified game")]
+        [Command("whosplaying"), Summary("Get players by a specified game"), Alias("wspl")]
         public async Task WhosPlayingByAGame([Summary("Game")] string game)
         {
             var allUsers = await Context.Guild.GetUsersAsync();
@@ -70,6 +72,12 @@ namespace SC2Bot.WebSocket.Commands
 
             if (players == null) await ReplyAsync("Personne ne joue à " + game);
             else await ReplyAsync("", false, CreateEmbedWhosPlaying(players));
+        }
+
+        [Command("our"), Summary("Ouranos is our")]
+        public async Task OuranosIsOur([Summary("Game")] string adjectif)
+        {
+            await ReplyAsync("Ouranos est notre " + adjectif);
         }
 
         private Embed CreateEmbedWhosPlaying(IEnumerable<Tuple<string, IEnumerable<IUser>>> GamesPlayer)
@@ -94,31 +102,12 @@ namespace SC2Bot.WebSocket.Commands
             return eb;
         }
 
-        private async Task<string> Roles(IUser u, string race)
+        private async Task<Tuple<IGuildUser, List<IRole>>> GetConfigUserRoles(ulong UserID)
         {
-            var roles = new List<IRole>(Context.Guild.Roles);
-            var guild = await Context.Guild.GetUserAsync(u.Id);
+            var roles = new List<IRole>(Context.Guild.Roles.Where(x => x.Position < 8 && x.Position > 3));
+            var guild = await Context.Guild.GetUserAsync(UserID);
 
-            IRole role = null;
-            string strRtn = string.Empty;
-
-            switch (race.ToLower())
-            {
-                case "zerg": role = roles.Find(r => r.Name.ToLower() == "zerg"); strRtn = Properties.Resources.ZergQuote; break;
-                case "terran": role = roles.Find(r => r.Name.ToLower() == "terran"); strRtn = Properties.Resources.TerranQuote; break;
-                case "protoss": role = roles.Find(r => r.Name.ToLower() == "protoss"); strRtn = Properties.Resources.ProtossQuote; break;
-                case "random": role = roles.Find(r => r.Name.ToLower() == "random"); strRtn = Properties.Resources.RandomQuote; break;
-            }
-
-            if (role != null)
-            {
-                await guild.AddRoleAsync(role);
-                return strRtn;
-            }
-            else
-            {
-                return @"¯\_(ツ)_/¯";
-            }
+            return new Tuple<IGuildUser, List<IRole>>(guild, roles);
         }
     }
 }
