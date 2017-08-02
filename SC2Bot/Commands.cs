@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using f = AligulacSC2.Format;
 
 namespace SC2Bot
 {
@@ -74,7 +75,7 @@ namespace SC2Bot
             if (parser.Parameters[0] == "-help")
                 return ConvertSingleReturnToList(Res("PlayerCommandHelp"));
 
-            return Aligulac.ShowPlayerObject(await _i.Aligulac.Player(parser.Parameters[0]));
+            return f.ShowPlayerObject(await _i.Aligulac.Player(parser.Parameters[0]));
         }
 
         public static async Task<List<string>> Balance(Parser parser, Server s = null, User u = null)
@@ -136,7 +137,7 @@ namespace SC2Bot
 
             if (string.IsNullOrEmpty(err))
             {
-                return Aligulac.ShowPeriodObject(
+                return f.ShowPeriodObject(
                     await _i.Aligulac.Balance(fromDate, toDate, average, op, weak, limit),
                         (op || weak), op, average);
             }
@@ -154,24 +155,7 @@ namespace SC2Bot
 
             if (parser.Parameters.Length < 2)
                 return ConvertSingleReturnToList(Res("PredictCommandMissing"));
-
-            #region EasterEggCrunchyPredict
-            if (parser.Parameters[0].ToLower() == "crunchy" || parser.Parameters[1].ToLower() == "crunchy")
-            {
-                if (parser.Parameters.Where(x => x == "-real").Count() > 0)
-                {
-                    int BOnb = 3;
-                    if (parser.Parameters.Length > 2)
-                        int.TryParse(parser.Parameters[2], out BOnb);
-
-                    if (parser.Parameters[0].ToLower() == "crunchy")
-                        return await _i.Aligulac.CrunchyRules(parser.Parameters[1], BOnb);
-                    else
-                        return await _i.Aligulac.CrunchyRules(parser.Parameters[0], BOnb);
-                }
-            }
-            #endregion
-
+            
             int nbBO = 3;
 
             if (parser.Parameters.Length == 3)
@@ -180,7 +164,7 @@ namespace SC2Bot
             var retPred = await _i.Aligulac.Predict(parser.Parameters[0], parser.Parameters[1], nbBO.ToString());
 
             if (string.IsNullOrEmpty(retPred.Error))
-                return Aligulac.ShowPredictionObject(retPred);
+                return f.ShowPredictionObject(retPred);
             else
                 return ConvertSingleReturnToList(retPred.Error);
         }
@@ -195,7 +179,7 @@ namespace SC2Bot
             int topNb = 10;
             if (parser.Parameters != null && Helpers.Discord.IsAdmin(u))
                 int.TryParse(parser.Parameters[0], out topNb);
-            return Aligulac.ShowTopObject(await _i.Aligulac.Top(topNb));
+            return f.ShowTopObject(await _i.Aligulac.Top(topNb));
         }
 
         public static async Task<List<string>> Quote(Parser parser, Server s = null, User u = null)

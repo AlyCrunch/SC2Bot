@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aligulac.cs" />
+    <Compile Include="Format.cs" />
     <Compile Include="Objects\Meta.cs" />
     <Compile Include="Objects\Period.cs" />
     <Compile Include="Objects\Player.cs" />

@@ -16,7 +16,7 @@ namespace SC2Bot.WebSocket.Helpers
 
         public IEnumerable<Tuple<string, IEnumerable<IUser>>> GetPlayers(IReadOnlyCollection<IUser> users)
         {
-            var result = users.Where(x => x.Game.HasValue)
+            var result = users.Where(x => !x.IsBot && x.Game.HasValue)
                             .GroupBy(x => x.Game?.Name);
 
             return ConvertIGroupingToTuple(result);
@@ -25,7 +25,7 @@ namespace SC2Bot.WebSocket.Helpers
         public IEnumerable<Tuple<string, IEnumerable<IUser>>> GetPlayersByGame(string game, IReadOnlyCollection<IUser> users)
         {
             string g = game.ToUpperInvariant();
-            var result = users.Where(x => x.Game.HasValue)
+            var result = users.Where(x => !x.IsBot && x.Game.HasValue)
                             .GroupBy(x => x.Game?.Name)
                             .Where(x => x.Key.ToUpperInvariant().Contains(g));
 

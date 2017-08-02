@@ -10,6 +10,77 @@ namespace SC2Bot.WebSocket.Commands
     public class General : ModuleBase
     {
         private Color GeneralColor = new Color(0, 204, 102);
+        private CommandService _service;
+
+        public General(CommandService service)
+        {
+            _service = service;
+        }
+
+        [Command("help")]
+        public async Task HelpAsync()
+        {
+            var builder = new EmbedBuilder()
+            {
+                Color = new Color(114, 137, 218),
+                Description = "Tu peux utiliser :"
+            };
+
+            foreach (var module in _service.Modules)
+            {
+                string description = null;
+                foreach (var cmd in module.Commands)
+                {
+                    var result = await cmd.CheckPreconditionsAsync(Context);
+                    if (result.IsSuccess)
+                        description += $"!{cmd.Aliases.First()}\n";
+                }
+
+                if (!string.IsNullOrWhiteSpace(description))
+                {
+                    builder.AddField(x =>
+                    {
+                        x.Name = module.Name;
+                        x.Value = description;
+                        x.IsInline = false;
+                    });
+                }
+            }
+            await ReplyAsync("", false, builder.Build());
+        }
+
+        [Command("help")]
+        public async Task HelpAsync(string command)
+        {
+            var result = _service.Search(Context, command);
+
+            if (!result.IsSuccess)
+            {
+                await ReplyAsync($"Sorry, I couldn't find a command like **{command}**.");
+                return;
+            }
+
+            var builder = new EmbedBuilder()
+            {
+                Color = new Color(114, 137, 218),
+                Description = $"Here are some commands like **{command}**"
+            };
+
+            foreach (var match in result.Commands)
+            {
+                var cmd = match.Command;
+
+                builder.AddField(x =>
+                {
+                    x.Name = string.Join(", ", cmd.Aliases);
+                    x.Value = $"Parameters: {string.Join(", ", cmd.Parameters.Select(p => p.Name))}\n" +
+                              $"Summary: {cmd.Summary}";
+                    x.IsInline = false;
+                });
+            }
+
+            await ReplyAsync("", false, builder.Build());
+        }
 
         [Command("commands"), Summary("Get list commands")]
         public async Task ListCommands()
@@ -53,24 +124,23 @@ namespace SC2Bot.WebSocket.Commands
             var config = GetConfigUserRoles(user.Id);
             await ReplyAsync(await Helpers.GeneralHelper.Roles(config.Result.Item1, config.Result.Item2, new List<string>() { race, seconde }));
         }
-
-        [Command("whosplaying"), Summary("Get all players grouped by games"), Alias("wspl")]
-        public async Task WhosPlayingAll()
-        {
-            var allUsers = await Context.Guild.GetUsersAsync();
-            var players = new Helpers.WhosPlaying().GetPlayers(allUsers);
-
-            if (players == null) await ReplyAsync("Personne ne joue.");
-            else await ReplyAsync("", false, CreateEmbedWhosPlaying(players));
-        }
-
+        
         [Command("whosplaying"), Summary("Get players by a specified game"), Alias("wspl")]
-        public async Task WhosPlayingByAGame([Summary("Game")] string game)
+        public async Task WhosPlayingByAGame([Summary("Game (optional)")] string game = null)
         {
             var allUsers = await Context.Guild.GetUsersAsync();
-            var players = new Helpers.WhosPlaying().GetPlayersByGame(game, allUsers);
+            IEnumerable<Tuple<string, IEnumerable<IUser>>> players = null;
+            var strRetNull = "Personne ne joue.";
 
-            if (players == null) await ReplyAsync("Personne ne joue à " + game);
+            if (game != null)
+            {
+                strRetNull = "Personne ne joue à " + game;
+                players = new Helpers.WhosPlaying().GetPlayersByGame(game, allUsers);
+            }
+            else
+                players = new Helpers.WhosPlaying().GetPlayers(allUsers);
+
+            if (players == null) await ReplyAsync(strRetNull);
             else await ReplyAsync("", false, CreateEmbedWhosPlaying(players));
         }
 

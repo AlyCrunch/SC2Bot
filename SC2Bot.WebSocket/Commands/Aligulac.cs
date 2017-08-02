@@ -15,7 +15,7 @@ namespace SC2Bot.WebSocket.Commands
     {
         private a.Aligulac al = Helpers.Infos.Aligulac;
         private Color AligulacColor = new Color(255, 255, 255);
-        
+
         [Command("predict"), Summary("Get prediction about matches.")]
         public async Task Predict([Summary("First player")] string player1, [Summary("Second player")] string player2, [Summary("Optionnal, number of best of")] int BO = 3)
         {
@@ -99,7 +99,7 @@ namespace SC2Bot.WebSocket.Commands
 
             return eb;
         }
-        
+
         private string RaceFormat(string r)
         {
             switch (r)
@@ -123,7 +123,7 @@ namespace SC2Bot.WebSocket.Commands
         public async Task Balance(int MaxResult = 20)
         {
             var bs = await al.Balance(new DateTime(), new DateTime(), false, false, false, MaxResult);
-            await ReplyAsync("", false, CreateEmbedBalance(bs));
+            await ReplyAsync("", false, CreateEmbedBalanceSimplified(bs));
         }
 
         [Command("avg"), Summary("Get stats about global winrate races.")]
@@ -156,7 +156,7 @@ namespace SC2Bot.WebSocket.Commands
                                                 .WithIconUrl("http://i.imgur.com/HcSfSR2.png")
                                                 .WithUrl("http://aligulac.com/misc/balance/")
             };
-            
+
             foreach (var p in ps.Results)
                 eb.AddField(x =>
                 {
@@ -167,17 +167,17 @@ namespace SC2Bot.WebSocket.Commands
 
             string FormatPeriodDate(o.Period p)
             {
-                return $"{p.StartDate.ToShortDateString()} -------> {p.EndDate.ToShortDateString()}"; 
+                return $"{p.StartDate.ToShortDateString()} -------> {p.EndDate.ToShortDateString()}";
             }
             string FormatPeriodResult(o.Period p)
             {
                 return $"{RacePeriod(p.Leading, true, false)}    | {RacePeriod(p.MidRace, false, false)}    | {RacePeriod(p.Lagging, false, true)}";
-            }            
+            }
 
             string RacePeriod(o.LeadingRace r, bool isLeading, bool isLagging)
             {
                 string percent = $"{r.DifferencePourcent}%";
-                
+
                 if (r.isOP || r.isWeak) percent = $"__**{percent}**__";
 
                 return $"{RaceFormat(r.Race)} {percent}";
@@ -185,6 +185,52 @@ namespace SC2Bot.WebSocket.Commands
 
             return eb;
         }
+
+        private Embed CreateEmbedBalanceSimplified(o.GenericResult<o.Period> ps)
+        {
+            EmbedBuilder eb = new EmbedBuilder()
+            {
+                Color = AligulacColor,
+                Author = new EmbedAuthorBuilder().WithName("Aligulac")
+                                                .WithIconUrl("http://i.imgur.com/HcSfSR2.png")
+                                                .WithUrl("http://aligulac.com/periods/"),
+                Description = "Représente la domination de race dans le top player. Au dessus de 10% une race est considérée OP (OverPowered) et en dessous de 10% UP (UnderPowered), ces chiffres sont soulignés dans la liste."
+            };
+            var psa = ps.Results;
+
+            eb.AddField(x =>
+            {
+                x.IsInline = true;
+                x.Name = "Date (games)";
+                x.Value = string.Join("\n", psa.Select(p => $":black_small_square:**{p.EndDate.ToShortDateString()}** ({p.NumGames})"));
+            });
+
+            eb.AddField(x =>
+            {
+                x.IsInline = true;
+                x.Name = "Dominant";
+                x.Value = string.Join("\n", psa.Select(p => RacePeriod(p.Leading, true, false)));
+            });
+
+            eb.AddField(x =>
+            {
+                x.IsInline = true;
+                x.Name = "Dominé";
+                x.Value = string.Join("\n", psa.Select(p => RacePeriod(p.Lagging, false, true)));
+            });
+            
+            string RacePeriod(o.LeadingRace r, bool isLeading, bool isLagging)
+            {
+                string percent = $"{r.DifferencePourcent}%";
+
+                if (r.isOP || r.isWeak) percent = $"__**{percent}**__";
+
+                return $"{RaceFormat(r.Race)} {percent}";
+            }
+
+            return eb;
+        }
+
         private string RaceFormat(string r)
         {
             switch (r)
