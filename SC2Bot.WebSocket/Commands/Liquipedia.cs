@@ -1,4 +1,5 @@
 ﻿using Crawlers.Objects.Liquipedia;
+using hs = SC2Bot.WebSocket.Helpers.HelpStrings.Liquipedia;
 using Discord;
 using Discord.Commands;
 using System;
@@ -12,14 +13,14 @@ namespace SC2Bot.WebSocket.Commands
     {
         private static Color LiquipediaColor = new Color(37, 70, 115);
 
-        [Command("transfer"), Summary("Liste des transferts de joueurs / retraites / disband")]
+        [Command("transfer"), Summary(hs.transferSummary), Remarks(hs.transferRemarks)]
         public async Task GetTransferList()
         {
             var TL = await new Crawlers.Liquipedia().GetTransfert();
             await ReplyAsync("", false, CreateEmbedTransfer(TL));
         }
 
-        [Command("live"), Summary("Tous les évenements en live")]
+        [Command("live"), Summary(hs.liveSummary), Remarks(hs.liveRemarks)]
         public async Task GetLiveEvents()
         {
             var LE = await new Crawlers.Liquipedia().GetLiveEvents();
@@ -32,8 +33,8 @@ namespace SC2Bot.WebSocket.Commands
             }
         }
         
-        [Command("event"), Summary("Tous les événements SC2 présent dans le calendrier TeamLiquid")]
-        public async Task GetEventsType([Summary("Precise les événement de la journée ou de la semaine (day|week) (optionnel)")] string type = "day")
+        [Command("event"), Summary(hs.eventSummary), Remarks(hs.eventRemarks)]
+        public async Task GetEventsType([Summary("Jour ou Semaine (day|week) (optionnel, day)")] string type = "day")
         {
             await SendEvents(await new Crawlers.Liquipedia().GetCalendarEvents(DateTime.Now, IsWeek(type)));
         }

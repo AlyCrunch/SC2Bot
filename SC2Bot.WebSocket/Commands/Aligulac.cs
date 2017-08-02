@@ -1,23 +1,22 @@
 ﻿using Discord.Commands;
 using a = AligulacSC2;
 using o = AligulacSC2.Objects;
+using hs = SC2Bot.WebSocket.Helpers.HelpStrings.Aligulac;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Discord;
 
 namespace SC2Bot.WebSocket.Commands
 {
+    [Remarks("")]
     public class Aligulac : ModuleBase
     {
         private a.Aligulac al = Helpers.Infos.Aligulac;
         private Color AligulacColor = new Color(255, 255, 255);
 
-        [Command("predict"), Summary("Get prediction about matches.")]
-        public async Task Predict([Summary("First player")] string player1, [Summary("Second player")] string player2, [Summary("Optionnal, number of best of")] int BO = 3)
+        [Command("predict"), Summary(hs.predictSummary), Remarks(hs.predictRemarks)]
+        public async Task Predict([Summary("Joueur A")] string player1, [Summary("Joueur B")] string player2, [Summary("Best Of (Optionnel = 3)")] int BO = 3)
         {
             var retPred = await al.Predict(player1, player2, BO.ToString());
 
@@ -27,11 +26,70 @@ namespace SC2Bot.WebSocket.Commands
                 await ReplyAsync(retPred.Error);
         }
 
-        [Command("top"), Summary("Get top player.")]
-        public async Task Top([Summary("Optional, TOP number max")] int NbTop = 10)
+        [Command("top"), Summary(hs.topSummary), Remarks(hs.topRemarks)]
+        public async Task Top([Summary("Nombre du top, max 60 (Optionnel, 10)")] int NbTop = 10)
         {
+            if (NbTop > 50) NbTop = 50;
             var top = await al.Top(NbTop);
             await ReplyAsync("", false, CreateEmbedTop(top, NbTop));
+        }
+
+        [Command("op"), Summary(hs.opSummary), Remarks(hs.opRemarks)]
+        public async Task Balance(int MaxResult = 20)
+        {
+            var bs = await al.Balance(new DateTime(), new DateTime(), false, false, false, MaxResult);
+            await ReplyAsync("", false, CreateEmbedBalance(bs));
+        }
+
+        [Command("earn"), Summary(hs.earnSummary), Remarks(hs.earnRemarks)]
+        public async Task Earnings([Summary("Année(s) de gain (Optionnel, toutes les années)")] string year = "", [Summary("Pays (Norme ISO) (Optionnel, tous les pays)")] string country = "")
+        {
+            await ReplyAsync("Bientôt disponible");
+        }
+
+        private Embed CreateEmbedBalance(o.GenericResult<o.Period> ps)
+        {
+            EmbedBuilder eb = new EmbedBuilder()
+            {
+                Color = AligulacColor,
+                Author = new EmbedAuthorBuilder().WithName("Aligulac")
+                                                .WithIconUrl("http://i.imgur.com/HcSfSR2.png")
+                                                .WithUrl("http://aligulac.com/periods/"),
+                Description = "Au dessus de 10% une race est considérée OP (OverPowered) et en dessous de 10% UP (UnderPowered), ces chiffres sont soulignés dans la liste."
+            };
+            var psa = ps.Results;
+
+            eb.AddField(x =>
+            {
+                x.IsInline = true;
+                x.Name = "Date (games)";
+                x.Value = string.Join("\n", psa.Select(p => $":black_small_square:**{p.EndDate.ToShortDateString()}** ({p.NumGames})"));
+            });
+
+            eb.AddField(x =>
+            {
+                x.IsInline = true;
+                x.Name = "Dominant";
+                x.Value = string.Join("\n", psa.Select(p => RacePeriod(p.Leading, true, false)));
+            });
+
+            eb.AddField(x =>
+            {
+                x.IsInline = true;
+                x.Name = "Dominé";
+                x.Value = string.Join("\n", psa.Select(p => RacePeriod(p.Lagging, false, true)));
+            });
+
+            string RacePeriod(o.LeadingRace r, bool isLeading, bool isLagging)
+            {
+                string percent = $"{r.DifferencePourcent}%";
+
+                if (r.isOP || r.isWeak) percent = $"__**{percent}**__";
+
+                return $"{RaceFormat(r.Race)} {percent}";
+            }
+
+            return eb;
         }
 
         private Embed CreateEmbedPrediction(o.Prediction p)
@@ -113,6 +171,9 @@ namespace SC2Bot.WebSocket.Commands
         }
     }
 
+    /*
+     * Shitty results
+     * 
     [Group("balance")]
     public class AligulacBalance : ModuleBase
     {
@@ -243,4 +304,6 @@ namespace SC2Bot.WebSocket.Commands
             }
         }
     }
+    */
+
 }

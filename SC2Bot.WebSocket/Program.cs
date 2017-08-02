@@ -12,8 +12,6 @@ namespace SC2Bot.WebSocket
         private CommandService commands;
         private DiscordSocketClient client;
         private NonCommands.EventTimer events = new NonCommands.EventTimer();
-        private SocketGuild guild;
-        private SocketTextChannel channel;
 
         public static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
@@ -32,10 +30,11 @@ namespace SC2Bot.WebSocket
             
             client.Ready += () =>
             {
-                Console.WriteLine("Yolo swagghetti");
+                var guild = Helpers.GeneralHelper.First(client.Guilds);
+                var channel = guild.DefaultChannel;
 
-                guild = client.GetGuild(139482122548281345);
-                channel = guild.GetTextChannel(139482122548281345);
+                Console.WriteLine($"Connecté sur {guild.Name}, le channel par défaut est {channel.Name}");
+                client.SetGameAsync("écrivez !cmd");
 
                 events.InitialiseAutoEvent(channel);
 
@@ -65,7 +64,7 @@ namespace SC2Bot.WebSocket
             var result = await commands.ExecuteAsync(context, argPos);
 
             if (!result.IsSuccess)
-                await context.Channel.SendMessageAsync(result.ErrorReason);
+                await context.Channel.SendMessageAsync(ErrorMessageManagement(result));
         }
         
         private Task Log(LogMessage msg)
@@ -74,5 +73,13 @@ namespace SC2Bot.WebSocket
             return Task.CompletedTask;
         }
 
+        private string ErrorMessageManagement(IResult r)
+        {
+            if (r.Error == CommandError.BadArgCount) return Properties.Resources.BadArgCount;
+            if (r.Error == CommandError.UnknownCommand) return Properties.Resources.UnknownCommand;
+
+            return r.ErrorReason;
+        }
+        
     }
 }

@@ -167,6 +167,7 @@
     <Compile Include="Commands\Liquipedia.cs" />
     <Compile Include="Commands\Quotes.cs" />
     <Compile Include="Helpers\GeneralHelper.cs" />
+    <Compile Include="Helpers\HelpStrings.cs" />
     <Compile Include="Helpers\ImgurHelper.cs" />
     <Compile Include="Helpers\Infos.cs" />
     <Compile Include="Helpers\WhosPlaying.cs" />

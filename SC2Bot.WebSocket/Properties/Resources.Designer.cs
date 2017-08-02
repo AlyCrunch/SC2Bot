@@ -79,11 +79,20 @@ namespace SC2Bot.WebSocket.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Utilise le site Aligulac (http://aligulac.com/periods/)\nPermet de voir la race dominante et dominée. \n```# Renvoie les 10 derniers résultats\n!balance```\n\n```# Renvoie les résultats depuis une date, si le -to est renseigné, les résultats sont compris entre ces deux dates\n!balance -from 02/06/2013 -to 23/12/2013```\n\n```# Donne un résumé des races OP\n!balance -op\n\n# Donne un résumé des races faibles\n!balance -weak```\n\n```# Condense et fait la moyenne du resultat\n!balance -avg```.
+        ///   Recherche une chaîne localisée semblable à Liste des auteurs de quotes\n```{0}```.
         /// </summary>
-        internal static string BalanceCommandHelp {
+        internal static string AuthorQuotesList {
             get {
-                return ResourceManager.GetString("BalanceCommandHelp", resourceCulture);
+                return ResourceManager.GetString("AuthorQuotesList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Le nombre d&apos;arguments est incorrect, rematch bro..
+        /// </summary>
+        internal static string BadArgCount {
+            get {
+                return ResourceManager.GetString("BadArgCount", resourceCulture);
             }
         }
         
@@ -124,47 +133,11 @@ namespace SC2Bot.WebSocket.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Il y a plusieurs commandes disponibles : `!top` `!predict` `!quote` `!balance` `!transfer`\nIl suffit d&apos;utiliser le mot clé \&quot;**-help**\&quot; pour plus d&apos;information, exemple :\n`!predict -help`.
+        ///   Recherche une chaîne localisée semblable à Je n&apos;ai pas de quote pour ce joueur..
         /// </summary>
-        internal static string HelpCommand {
+        internal static string NoQuoteFor {
             get {
-                return ResourceManager.GetString("HelpCommand", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Recherche un joueur sur Aligulac, si les informations sont disponibles, la team ainsi que la page liquipedia est retournée.\nLa syntaxe à utiliser est : \n ```!player pseudo```.
-        /// </summary>
-        internal static string PlayerCommandHelp {
-            get {
-                return ResourceManager.GetString("PlayerCommandHelp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Il manque des paramètres.\nLa syntaxe correcte est : \n ```!search mot_clé```.
-        /// </summary>
-        internal static string PlayerCommandMissing {
-            get {
-                return ResourceManager.GetString("PlayerCommandMissing", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Utilise le système de prédiction d&apos;Aligulac (http://aligulac.com/inference/).\nLa syntaxe à utiliser est : \n```!predict Player_A Player_B (Optionnel BO_nb)```\n\nExample :\n```!predict ByuN Dark 3```.
-        /// </summary>
-        internal static string PredictCommandHelp {
-            get {
-                return ResourceManager.GetString("PredictCommandHelp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Il manque des paramètres.\nLa syntaxe correcte est :\n```!predict Player_A Player_B (Optionnel BO_nb)```\n\nExample :\n ```!predict ByuN Dark 3```.
-        /// </summary>
-        internal static string PredictCommandMissing {
-            get {
-                return ResourceManager.GetString("PredictCommandMissing", resourceCulture);
+                return ResourceManager.GetString("NoQuoteFor", resourceCulture);
             }
         }
         
@@ -178,25 +151,7 @@ namespace SC2Bot.WebSocket.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Retourne une quote SC2 via le site sc2quoteoftheday.com (et plus)\nLa syntaxe à utiliser est : `!quote (optionnel auteur) (optionnel -count)`\nExemple :\n```\n# Récupère les quotes de l&apos;auteur cité\n!quote Day9\n\n# Retourne le nombre de quote pour l&apos;auteur cité\n!quote Day9 -count\n\n# Retourne tous les auteurs de quotes (en message privé)\n!quote -all```.
-        /// </summary>
-        internal static string QuoteCommandHelp {
-            get {
-                return ResourceManager.GetString("QuoteCommandHelp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Je n&apos;ai pas de quote pour **{0}**\nMais celle là est pas mal quand même :\n.
-        /// </summary>
-        internal static string QuoteCommandNotFound {
-            get {
-                return ResourceManager.GetString("QuoteCommandNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Liste envoyée en MP..
+        ///   Recherche une chaîne localisée semblable à Liste des joueurs envoyée en message privée.&quot;.
         /// </summary>
         internal static string QuoteCommandSendMP {
             get {
@@ -214,15 +169,6 @@ namespace SC2Bot.WebSocket.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Hello !\nTu as rejoint le Discord **SC2 France** mais tu n&apos;as toujours pas renseigné ta race, quelle race joues-tu ?\nécris : **Zerg**, **Terran**, **Protoss** ou **Random**.
-        /// </summary>
-        internal static string RappelRaceStr {
-            get {
-                return ResourceManager.GetString("RappelRaceStr", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Recherche une chaîne localisée semblable à Kaboom Baby !.
         /// </summary>
         internal static string TerranQuote {
@@ -232,29 +178,11 @@ namespace SC2Bot.WebSocket.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Utilise le système de classement d&apos;Aligulac.\nLa syntaxe à utiliser est : \n```!top```.
+        ///   Recherche une chaîne localisée semblable à REKT, cette commande n&apos;existe pas.
         /// </summary>
-        internal static string TopCommandHelp {
+        internal static string UnknownCommand {
             get {
-                return ResourceManager.GetString("TopCommandHelp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Retourne la liste des joueurs transférés recemment. Les données sont extraites à partir du wiki TeamLiquid..
-        /// </summary>
-        internal static string TransfersHelp {
-            get {
-                return ResourceManager.GetString("TransfersHelp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Bienvenue !\nQuelle race joues-tu ?\nécris : **Zerg**, **Terran**, **Protoss** ou **Random**.
-        /// </summary>
-        internal static string WelcomeStr {
-            get {
-                return ResourceManager.GetString("WelcomeStr", resourceCulture);
+                return ResourceManager.GetString("UnknownCommand", resourceCulture);
             }
         }
         

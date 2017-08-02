@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using hs = SC2Bot.WebSocket.Helpers.HelpStrings.General;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -17,31 +18,30 @@ namespace SC2Bot.WebSocket.Commands
             _service = service;
         }
 
-        [Command("help")]
-        public async Task HelpAsync()
+        [Command("commands"), Alias("cmd"), Summary(hs.cmdSummary), Remarks(hs.cmdRemarks)]
+        public async Task Commands()
         {
             var builder = new EmbedBuilder()
             {
-                Color = new Color(114, 137, 218),
-                Description = "Tu peux utiliser :"
+                Color = GeneralColor
             };
 
             foreach (var module in _service.Modules)
             {
-                string description = null;
+                string cmdDescription = null;
                 foreach (var cmd in module.Commands)
                 {
                     var result = await cmd.CheckPreconditionsAsync(Context);
                     if (result.IsSuccess)
-                        description += $"!{cmd.Aliases.First()}\n";
+                        cmdDescription += $"!{cmd.Aliases.First()}  *{cmd.Summary}*\n";
                 }
 
-                if (!string.IsNullOrWhiteSpace(description))
+                if (!string.IsNullOrWhiteSpace(cmdDescription))
                 {
                     builder.AddField(x =>
                     {
                         x.Name = module.Name;
-                        x.Value = description;
+                        x.Value = cmdDescription;
                         x.IsInline = false;
                     });
                 }
@@ -49,46 +49,39 @@ namespace SC2Bot.WebSocket.Commands
             await ReplyAsync("", false, builder.Build());
         }
 
-        [Command("help")]
-        public async Task HelpAsync(string command)
+        [Command("help"), Alias("h"), Summary(hs.helpSummary), Remarks(hs.helpRemarks)]
+        public async Task HelpCommand(string command)
         {
             var result = _service.Search(Context, command);
 
             if (!result.IsSuccess)
             {
-                await ReplyAsync($"Sorry, I couldn't find a command like **{command}**.");
+                await ReplyAsync($"Désolée, il n'y a pas de commande **{command}** (encore ?).");
                 return;
             }
 
             var builder = new EmbedBuilder()
             {
-                Color = new Color(114, 137, 218),
-                Description = $"Here are some commands like **{command}**"
+                Color = GeneralColor,
             };
 
             foreach (var match in result.Commands)
-            {
+            {            
                 var cmd = match.Command;
+                string howTo = (string.IsNullOrEmpty(cmd.Remarks)) ? "" : $"\n\n{cmd.Remarks}";
 
                 builder.AddField(x =>
                 {
                     x.Name = string.Join(", ", cmd.Aliases);
-                    x.Value = $"Parameters: {string.Join(", ", cmd.Parameters.Select(p => p.Name))}\n" +
-                              $"Summary: {cmd.Summary}";
+                    x.Value = $"*{cmd.Summary}*" + howTo;
                     x.IsInline = false;
                 });
             }
 
             await ReplyAsync("", false, builder.Build());
         }
-
-        [Command("commands"), Summary("Get list commands")]
-        public async Task ListCommands()
-        {
-            await ReplyAsync("");
-        }
-
-        [Command("yesno"), Summary("Randomly say no or yes")]
+        
+        [Command("yesno"), Summary(hs.yesnoSummary), Remarks(hs.yesnoRemarks)]
         public async Task YesNo()
         {
             var imgr = new Helpers.ImgurHelper();
@@ -111,21 +104,22 @@ namespace SC2Bot.WebSocket.Commands
             Helpers.GeneralHelper.RemoveImageTemp(img);
         }
 
-        [Command("iam"), Summary("Choose your weapon, noob."), Alias("jesuis")]
+        [Command("iam"), Alias("jesuis"), Summary(hs.iamSummary), Remarks(hs.iamRemarks)]
         public async Task Assimilate([Summary("Race name.")] string race, [Summary("Second main race name.")] string seconde = "nope")
         {
             var config = GetConfigUserRoles(Context.Message.Author.Id);
             await ReplyAsync(await Helpers.GeneralHelper.Roles(config.Result.Item1, config.Result.Item2, new List<string>() { race, seconde }));
         }
-
+        /*
         [Command("assign"), Summary("Choose your weapon, noob."), RequireUserPermission(GuildPermission.Administrator)]
         public async Task AssimilateSomeone([Summary("User")] IUser user, [Summary("Main race name.")] string race, [Summary("Second main race name.")] string seconde = "nope")
         {
             var config = GetConfigUserRoles(user.Id);
             await ReplyAsync(await Helpers.GeneralHelper.Roles(config.Result.Item1, config.Result.Item2, new List<string>() { race, seconde }));
         }
-        
-        [Command("whosplaying"), Summary("Get players by a specified game"), Alias("wspl")]
+        */
+
+        [Command("whosplaying"), Alias("wspl"), Summary(hs.wsplSummary), Remarks(hs.wsplRemarks)]
         public async Task WhosPlayingByAGame([Summary("Game (optional)")] string game = null)
         {
             var allUsers = await Context.Guild.GetUsersAsync();
@@ -144,10 +138,10 @@ namespace SC2Bot.WebSocket.Commands
             else await ReplyAsync("", false, CreateEmbedWhosPlaying(players));
         }
 
-        [Command("our"), Summary("Ouranos is our")]
-        public async Task OuranosIsOur([Summary("Game")] string adjectif)
+        [Command("our"), Summary(hs.ourSummary), Remarks(hs.ourRemarks)]
+        public async Task OuranosIsOur([Summary("Nom")] string noun)
         {
-            await ReplyAsync("Ouranos est notre " + adjectif);
+            await ReplyAsync("<@!155732781966688256> est notre " + noun);
         }
 
         private Embed CreateEmbedWhosPlaying(IEnumerable<Tuple<string, IEnumerable<IUser>>> GamesPlayer)

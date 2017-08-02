@@ -1,4 +1,5 @@
 ﻿using Discord.Commands;
+using hs = SC2Bot.WebSocket.Helpers.HelpStrings.Quote;
 using System.Linq;
 using System.Threading.Tasks;
 using QuoteOfTheDay;
@@ -6,26 +7,33 @@ using Discord;
 
 namespace SC2Bot.WebSocket.Commands
 {
-    [Group("quote")]
     public class Quotes : ModuleBase
     {
-        [Command(""), Summary("Get a random quote of a player.")]
-        public async Task GetQuoteByPlayer([Summary("Player name.")] string player)
+        [Command("quote"), Summary(hs.quoteSummary), Remarks(hs.quoteRemarks)]
+        public async Task GetQuoteByPlayer([Summary("Nom de l'auteur")] string player = null)
         {
             var allQuotes = new SC2Quotes();
+
+            if(player == null)
+            {
+                await GetRandomQuote(allQuotes);
+                return;
+            }
+
             if (player == "all")
             {
-                string reply = $"Liste des auteurs de quotes\n```{ string.Join(", ", allQuotes.AllAuthor()) }```";
-                var prout = await Context.User.CreateDMChannelAsync();
-                await prout.SendMessageAsync(reply);
+                //string reply = $"Liste des auteurs de quotes\n```{ string.Join(", ", allQuotes.AllAuthor()) }```";
+                string reply = string.Format(Properties.Resources.AuthorQuotesList, string.Join(", ", allQuotes.AllAuthor()));
+                var DMChannel = await Context.User.CreateDMChannelAsync();
+                await DMChannel.SendMessageAsync(reply);
 
-                await ReplyAsync("Liste des joueurs envoyée en message privée.");
+                await ReplyAsync(Properties.Resources.QuoteCommandSendMP);
                 return;
             }
 
             if (!allQuotes.AllAuthor().Any(x => x.ToLower() == player.ToLower()))
             {
-                await ReplyAsync("Je n'ai pas de quote pour ce joueur.");
+                await ReplyAsync(Properties.Resources.NoQuoteFor);
                 await ReplyAsync("", false, CreateEmbedQuote(allQuotes.RandomQuote()));
                 return;
             }
@@ -33,12 +41,10 @@ namespace SC2Bot.WebSocket.Commands
             var quote = allQuotes.RandomQuoteAuthor(player);
             await ReplyAsync("", false, CreateEmbedQuote(quote));
         }
-
-        [Command(""), Summary("Get a random quote.")]
-        public async Task GetRandomQuote()
+        
+        public async Task GetRandomQuote(SC2Quotes q)
         {
-            var allQuotes = new SC2Quotes();
-            var quote = allQuotes.RandomQuote();
+            var quote = q.RandomQuote();
 
             await ReplyAsync("", false, CreateEmbedQuote(quote));
         }

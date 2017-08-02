@@ -123,53 +123,17 @@
   <data name="AlbumYes" xml:space="preserve">
     <value>vZaFU</value>
   </data>
-  <data name="BalanceCommandHelp" xml:space="preserve">
-    <value>Utilise le site Aligulac (http://aligulac.com/periods/)\nPermet de voir la race dominante et dominée. \n```# Renvoie les 10 derniers résultats\n!balance```\n\n```# Renvoie les résultats depuis une date, si le -to est renseigné, les résultats sont compris entre ces deux dates\n!balance -from 02/06/2013 -to 23/12/2013```\n\n```# Donne un résumé des races OP\n!balance -op\n\n# Donne un résumé des races faibles\n!balance -weak```\n\n```# Condense et fait la moyenne du resultat\n!balance -avg```</value>
-  </data>
-  <data name="HelpCommand" xml:space="preserve">
-    <value>Il y a plusieurs commandes disponibles : `!top` `!predict` `!quote` `!balance` `!transfer`\nIl suffit d'utiliser le mot clé \"**-help**\" pour plus d'information, exemple :\n`!predict -help`</value>
-  </data>
-  <data name="PlayerCommandHelp" xml:space="preserve">
-    <value>Recherche un joueur sur Aligulac, si les informations sont disponibles, la team ainsi que la page liquipedia est retournée.\nLa syntaxe à utiliser est : \n ```!player pseudo```</value>
-  </data>
-  <data name="PlayerCommandMissing" xml:space="preserve">
-    <value>Il manque des paramètres.\nLa syntaxe correcte est : \n ```!search mot_clé```</value>
-  </data>
-  <data name="PredictCommandHelp" xml:space="preserve">
-    <value>Utilise le système de prédiction d'Aligulac (http://aligulac.com/inference/).\nLa syntaxe à utiliser est : \n```!predict Player_A Player_B (Optionnel BO_nb)```\n\nExample :\n```!predict ByuN Dark 3```</value>
-  </data>
-  <data name="PredictCommandMissing" xml:space="preserve">
-    <value>Il manque des paramètres.\nLa syntaxe correcte est :\n```!predict Player_A Player_B (Optionnel BO_nb)```\n\nExample :\n ```!predict ByuN Dark 3```</value>
-  </data>
   <data name="ProtossQuote" xml:space="preserve">
     <value>My life for Aiur !</value>
   </data>
-  <data name="QuoteCommandHelp" xml:space="preserve">
-    <value>Retourne une quote SC2 via le site sc2quoteoftheday.com (et plus)\nLa syntaxe à utiliser est : `!quote (optionnel auteur) (optionnel -count)`\nExemple :\n```\n# Récupère les quotes de l'auteur cité\n!quote Day9\n\n# Retourne le nombre de quote pour l'auteur cité\n!quote Day9 -count\n\n# Retourne tous les auteurs de quotes (en message privé)\n!quote -all```</value>
-  </data>
-  <data name="QuoteCommandNotFound" xml:space="preserve">
-    <value>Je n'ai pas de quote pour **{0}**\nMais celle là est pas mal quand même :\n</value>
-  </data>
   <data name="QuoteCommandSendMP" xml:space="preserve">
-    <value>Liste envoyée en MP.</value>
+    <value>Liste des joueurs envoyée en message privée."</value>
   </data>
   <data name="RandomQuote" xml:space="preserve">
     <value>Pour les hommes !</value>
   </data>
-  <data name="RappelRaceStr" xml:space="preserve">
-    <value>Hello !\nTu as rejoint le Discord **SC2 France** mais tu n'as toujours pas renseigné ta race, quelle race joues-tu ?\nécris : **Zerg**, **Terran**, **Protoss** ou **Random**</value>
-  </data>
   <data name="TerranQuote" xml:space="preserve">
     <value>Kaboom Baby !</value>
-  </data>
-  <data name="TopCommandHelp" xml:space="preserve">
-    <value>Utilise le système de classement d'Aligulac.\nLa syntaxe à utiliser est : \n```!top```</value>
-  </data>
-  <data name="TransfersHelp" xml:space="preserve">
-    <value>Retourne la liste des joueurs transférés recemment. Les données sont extraites à partir du wiki TeamLiquid.</value>
-  </data>
-  <data name="WelcomeStr" xml:space="preserve">
-    <value>Bienvenue !\nQuelle race joues-tu ?\nécris : **Zerg**, **Terran**, **Protoss** ou **Random**</value>
   </data>
   <data name="yesno_Non" xml:space="preserve">
     <value>La réponse est **non**</value>
@@ -191,5 +155,17 @@
   </data>
   <data name="Emoji_Zerg" xml:space="preserve">
     <value>&lt;:zerg:272812425185853441&gt;</value>
+  </data>
+  <data name="AuthorQuotesList" xml:space="preserve">
+    <value>Liste des auteurs de quotes\n```{0}```</value>
+  </data>
+  <data name="NoQuoteFor" xml:space="preserve">
+    <value>Je n'ai pas de quote pour ce joueur.</value>
+  </data>
+  <data name="BadArgCount" xml:space="preserve">
+    <value>Le nombre d'arguments est incorrect, rematch bro.</value>
+  </data>
+  <data name="UnknownCommand" xml:space="preserve">
+    <value>REKT, cette commande n'existe pas</value>
   </data>
 </root>

@@ -69,5 +69,14 @@ namespace SC2Bot.WebSocket.Helpers
                 return @"¯\_(ツ)_/¯";
             }
         }
+
+        public static T First<T>(IEnumerable<T> items)
+        {
+            using (IEnumerator<T> iter = items.GetEnumerator())
+            {
+                iter.MoveNext();
+                return iter.Current;
+            }
+        }
     }
 }
