@@ -166,6 +166,7 @@
     <Compile Include="Commands\General.cs" />
     <Compile Include="Commands\Liquipedia.cs" />
     <Compile Include="Commands\Quotes.cs" />
+    <Compile Include="Commands\SpawningTool.cs" />
     <Compile Include="Helpers\GeneralHelper.cs" />
     <Compile Include="Helpers\HelpStrings.cs" />
     <Compile Include="Helpers\ImgurHelper.cs" />

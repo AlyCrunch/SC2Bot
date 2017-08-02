@@ -169,6 +169,15 @@ namespace SC2Bot.WebSocket.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Bientôt disponible.
+        /// </summary>
+        internal static string ReleaseSoon {
+            get {
+                return ResourceManager.GetString("ReleaseSoon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Kaboom Baby !.
         /// </summary>
         internal static string TerranQuote {

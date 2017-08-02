@@ -44,7 +44,7 @@ namespace SC2Bot.WebSocket.Commands
         [Command("earn"), Summary(hs.earnSummary), Remarks(hs.earnRemarks)]
         public async Task Earnings([Summary("Année(s) de gain (Optionnel, toutes les années)")] string year = "", [Summary("Pays (Norme ISO) (Optionnel, tous les pays)")] string country = "")
         {
-            await ReplyAsync("Bientôt disponible");
+            await ReplyAsync(Properties.Resources.ReleaseSoon);
         }
 
         private Embed CreateEmbedBalance(o.GenericResult<o.Period> ps)

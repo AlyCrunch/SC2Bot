@@ -31,6 +31,12 @@ namespace SC2Bot.WebSocket.Helpers
             public const string quoteRemarks = "Exemple :\n```\n# Récupère les quotes de l'auteur cité\n!quote Day9\n\n# Retourne tous les auteurs de quotes (en message privé)\n!quote -all```";
         }
 
+        public static class SpawningTools
+        {
+            public const string BOSummary = "Retourne une liste de BO selon des critères";
+            public const string BORemarks = "";
+        }
+
         public static class Liquipedia
         {
             public const string transferSummary = "Liste des derniers transferts de joueurs";

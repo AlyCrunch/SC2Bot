@@ -168,4 +168,7 @@
   <data name="UnknownCommand" xml:space="preserve">
     <value>REKT, cette commande n'existe pas</value>
   </data>
+  <data name="ReleaseSoon" xml:space="preserve">
+    <value>Bientôt disponible</value>
+  </data>
 </root>
